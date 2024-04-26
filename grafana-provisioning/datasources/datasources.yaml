@@ -1,0 +1,7 @@
+# config file for provisioning datasources
+apiVersion: 1
+datasources:
+  - name: Prometheus
+    type: prometheus
+    url: http://prometheus:9090
+    access: proxy

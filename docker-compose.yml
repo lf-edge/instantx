@@ -1,0 +1,30 @@
+services:
+
+  prometheus:
+    image: prom/prometheus:latest
+    command:
+      - --storage.tsdb.retention.time=7d
+      - --config.file=/etc/prometheus/prometheus.yml
+      # - --storage.tsdb.retention.size=10GB
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana-provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana-provisioning/datasources:/etc/grafana/provisioning/datasources
+
+  hivemq_ce:
+    image: hivemq/hivemq-ce
+    environment:
+      HIVEMQ_LOG_LEVEL: DEBUG
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./hivemq-prometheus-extension/:/opt/hivemq/extensions/hivemq-prometheus-extension/
+      - ./hivemq-extension-poc/:/opt/hivemq/extensions/hivemq-extension-poc/
