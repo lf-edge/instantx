@@ -1,3 +1,7 @@
+![Alt text](logo.png)
+
+The current state of the project represents a foundational stage, serving as an initial point of reference. Rest assured, our team is committed to releasing additional components to enhance the project's functionality in the near future
+
 # InstantX UC1 - HiveMQCE + Observability
 
 We have a package of 3 components: HiveMQ CE, Prometheus and Grafana
