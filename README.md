@@ -27,10 +27,13 @@
 
 * **UC1** - Distributing messages (esp. V2X messages) using the GeoHash structure
 <img src="./images/UseCases1.png" height="70" width="auto">
+
 * **UC2** - Exposing ETSI-ITS data (DENM/IVIM) from road users through APIs
 <img src="./images/UseCases2.png" height="70" width="auto">
+
 * **UC3** - Ingesting DENM/IVIM data through APIs from external provider
 <img src="./images/UseCases3.png" height="70" width="auto">
+
 * **UC4** - Providing an Integration framework with AMQP support
 <img src="./images/UseCases4.png" height="55" width="auto">
 
@@ -52,7 +55,7 @@
 
 
 ## Additional information
-- [Deployment QuickStart](deployment/quick-start.md)
+- [Deployment QuickStart](deployment/Quick-Start.md)
 
 - User guides
   - [MQTT Topic Structure](./docs/MQTT-Topic-Structure.md)
