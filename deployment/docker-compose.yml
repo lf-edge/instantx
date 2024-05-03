@@ -9,15 +9,15 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml
 
   grafana:
     image: grafana/grafana:latest
     ports:
       - "3000:3000"
     volumes:
-      - ./grafana-provisioning/dashboards:/etc/grafana/provisioning/dashboards
-      - ./grafana-provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./observability/grafana-provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./observability/grafana-provisioning/datasources:/etc/grafana/provisioning/datasources
 
   hivemq_ce:
     image: hivemq/hivemq-ce
@@ -26,5 +26,5 @@ services:
     ports:
       - "1883:1883"
     volumes:
-      - ./hivemq-prometheus-extension/:/opt/hivemq/extensions/hivemq-prometheus-extension/
-      - ./hivemq-extension-poc/:/opt/hivemq/extensions/hivemq-extension-poc/
+      - ./mqtt/extensions/hivemq-prometheus-extension/:/opt/hivemq/extensions/hivemq-prometheus-extension/
+      - ./mqtt/extensions/hivemq-extension-poc/:/opt/hivemq/extensions/hivemq-extension-poc/
