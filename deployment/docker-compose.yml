@@ -12,7 +12,10 @@ services:
       - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml
 
   grafana:
-    image: grafana/grafana:latest
+    # License - AGPL
+    #image: grafana/grafana:latest
+    # License - Apache 2.0
+    image: grafana/grafana:7.5.4
     ports:
       - "3000:3000"
     volumes:
