@@ -1,6 +1,6 @@
 # License Notice
 
-This project includes software packages under the deployment folder that are licensed under different licenses – MIT or Apache 2. To determine the specific license for each module, please refer to the LICENSE file located in the root directory of the corresponding module.
+This project includes software packages under the deployment folder that are licensed under different licenses – MIT or Apache 2.
 
 # Important Notes:
 
