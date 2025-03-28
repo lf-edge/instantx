@@ -1,5 +1,16 @@
+global:
+  scrape_interval: 15s
+
 scrape_configs:
+  - job_name: 'api_service'
+    static_configs:
+      - targets: ['api-service:8000']  # Replace with the appropriate address
+
   - job_name: 'hivemq'
-    scrape_interval: 5s
     static_configs:
       - targets: ['hivemq_ce:9399']
+
+  - job_name: 'nifi'
+    fallback_scrape_protocol: PrometheusText0.0.4
+    static_configs:
+      - targets: ['nifi:9094']

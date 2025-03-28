@@ -2,7 +2,7 @@
 
 # MQTT Topic Structure
 
-In IoT applications, utilizing [geohash-based MQTT topic structures](Geohashes.md) can facilitate efficient communication and management of spatial data. Here's how you can leverage such a structure effectively
+In IoT applications, utilizing [geohash-based MQTT topic structures](Geohashes.md) can facilitate efficient communication and management of spatial data. Here's how you can leverage such a structure effectively.
 
 ## Topic Structure Overview
 

@@ -1,0 +1,216 @@
+V2XHeaders DEFINITIONS AUTOMATIC TAGS ::= BEGIN
+		IMPORTS
+		DENM FROM DENM-PDU-Descriptions {
+			itu-t (0) identified-organization (4) etsi (0) itsDomain (5) wg1 (1) en (302637) denm (1) version (2)
+		}
+    	StationType FROM ITS-Container {
+            itu-t (0) identified-organization (4) etsi (0) itsDomain (5) wg1 (1) ts (102894) cdd (2) version (2)
+        }
+        CollectivePerceptionMessage FROM CPM-PDU-Descriptions {
+			itu-t (0) identified-organization (4) etsi (0) itsDomain (5) wg1 (1) ts (103324) cpm (1) major-version-1 (1) minor-version-1(1)
+		};
+
+    BTPB ::= SEQUENCE
+    {
+        -- following ETSI TS 103 248 V1.2.1 Table[1] 
+        destinationPort INTEGER {
+            denm(2002),
+            spatem(2004),
+            saem(2005),
+            srem(2007),
+            ssem(2008),
+            cpm(2009),
+            -- allocated(2009),
+            evcsn-poi(2010),
+            tpg(2011),
+            charging(2012),
+            gpc(2013),
+            ctl(2014),
+            crl(2015),
+            certReqService(2016)
+        } (0..65535),
+
+        -- according with ETSI EN 302 636-m5-1 V2.2.1 Table[3]
+        -- Destination Port Info -> Default setting is 0.
+        -- Meaning that the right PDU should be:
+        -- destinationPortInfo INTEGER (0..65535) DEFAULT 0
+        destinationPortInfo INTEGER (0..65535)
+    }
+
+    -- According with chapter 9.6 (Basic Header) of ETSI EN 302 636-4-1 V1.4.1 (2020-01)
+
+    -- GeoNetworking
+    GN ::= SEQUENCE {
+     basicHeader BasicHeader,
+     commonHeader CommonHeader,
+     longPositionVector LongPositionVector
+    }
+
+    -- GeoNetworking header parts
+    BasicHeader ::= SEQUENCE
+    {
+        version INTEGER (0..15),
+        nextHeader INTEGER {
+            any(0),
+            commonHeader(1),
+            securedPacket(2)
+        }(0..15),
+        -- This field is reserved, please do not try to change it! By default, all of the 8 bits should contain '0'
+        reserved INTEGER(0..255),
+        lifeTime LifeTime,
+        remaingHop INTEGER(0..255)
+    }
+
+    LifeTime ::= SEQUENCE
+    {
+        multiplier INTEGER(0..63),
+        -- time base in seconds
+        base INTEGER {
+            halfSecond(0),
+            oneSecond(1),
+            tenSeconds(2),
+            hundredSeconds(3)
+        }(0..3)
+    }
+
+    -- According with chapter 9.7 (Common Header) of ETSI EN 302 636-4-1 V1.4.1 (2020-01)
+    CommonHeader ::= SEQUENCE
+    {
+        nextHeader NextHeader,
+        reserved1 INTEGER(0..15),
+        headerType INTEGER(0..15),
+        headerSubType INTEGER(0..15),
+        traficClass TraficClass,
+        flags FlagsType,
+        payloadLength INTEGER(0..65535),
+        maxHopLimit INTEGER(0..255),
+        reserved2 INTEGER(0..255)
+    }
+
+    FlagsType ::= SEQUENCE 
+    {
+        mobile BOOLEAN,
+        reserved INTEGER(0..127)
+    }
+
+    NextHeader ::= INTEGER 
+    {
+        any(0),
+        btpa(1),
+        btpb(2),
+        ipv6(3)
+    } (0..15)
+
+    -- This INTEGER is composed by HeaderType(HT) and HeaderSubType(HST)
+    -- For complete information check tables 7 and 9 of 'ETSI EN 302 636-4-1 V1.4.1 (2020-01)'
+    HeaderType ::= INTEGER 
+    {
+        anyUnspecified(0),
+        beaconUnspecified(16),
+
+        -- GeoUNICast
+        geoUnicastUnspecified(32),
+
+        -- GeoANYCast
+        geoAnyCastCircle(48),
+        geoAnyCastRect(49),
+        geoAnyCastElip(50),
+
+        -- GeoBROADCast
+        geoBroadCircle(64),
+        geoBroadRect(65),
+        geoBroadElip(66),
+
+        -- TSB
+        tsbSingleHop(80),
+        tsbMultiHop(81),
+
+        -- LS
+        lsRequest(96),
+        lsReply(97)
+    } (0..255)
+
+    TraficClass ::= SEQUENCE
+    {
+        scf BOOLEAN,
+        channelOffload BOOLEAN,
+        tcID INTEGER(0..63)
+    }
+    
+    FourBytesValue ::= INTEGER(0..4294967295)
+    
+    FourBytesSignedValue ::= INTEGER(-2147483648..2147483647)
+
+    MIDAddress ::= SEQUENCE {
+        -- Three bytes Integer
+        lsb INTEGER(0..16777215),
+        -- Three bytes Integer
+        msb INTEGER(0..16777215)
+    }
+
+    GNAddress ::= SEQUENCE {
+        configuration ENUMERATED { automatic, manual },
+        stationType StationType(0..31),
+        reserved INTEGER(0..1023),
+        mid MIDAddress
+    }
+
+    -- According with Chapter 9.5.2 of 'ETSI EN 302 636-4-1 V1.4.1 (2020-01)'
+    LongPositionVector ::= SEQUENCE
+    {
+        address     GNAddress,
+        tst         FourBytesValue,
+        latitude    FourBytesSignedValue,
+        longitude   FourBytesSignedValue,
+        pai         BOOLEAN,
+		speed       INTEGER(-16383..16382),
+        heading     INTEGER(0..65535)
+    }
+
+    SequenceNumber ::= INTEGER(0..65535)
+
+    GbcGacHeader ::= SEQUENCE
+    {
+      basicHeader BasicHeader,
+      commonHeader CommonHeader,
+      sequenceNumber SequenceNumber,
+      reserved1 INTEGER(0..65535),
+	  sopv LongPositionVector,
+      geoArea GeoArea,
+      reserved2 INTEGER(0..65535)
+    }
+
+    TSBMultiHopHeader ::= SEQUENCE
+    {
+      basicHeader BasicHeader,
+      commonHeader CommonHeader,
+      sequenceNumber SequenceNumber,
+      reserved1 INTEGER(0..65535),
+	  sopv LongPositionVector
+    }
+
+    GeoArea ::= SEQUENCE
+    {
+      lat FourBytesSignedValue,
+      long FourBytesSignedValue,
+      distanceA INTEGER(0..65535),
+      distanceB INTEGER(0..65535),
+      angle INTEGER(0..65535)
+    }
+
+	DenmEtsi ::= SEQUENCE
+	{
+      gbcGacHeader GbcGacHeader,
+      btpb BTPB,
+      denm DENM
+	}
+
+    CpmEtsi ::= SEQUENCE
+	{
+      gn GN,
+      shb FourBytesValue,
+      btpb BTPB,
+      cpm CollectivePerceptionMessage
+	}
+	
+END

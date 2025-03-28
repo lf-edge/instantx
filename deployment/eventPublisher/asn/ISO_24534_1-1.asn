@@ -1,0 +1,397 @@
+--<OSS.PDU>-- 
+
+-- ISO 24534-3:2015
+-- Version 29.4.2015
+
+
+ElectronicRegistrationIdentificationVehicleDataModule {iso(1) standard(0) iso24534 (24534) vehicleData (1) version1 (1)} 
+
+-- This version is upwards compatible with the previous version 0 in the sense that:
+-- any receiver can successfully receive data of either version
+-- But:
+--  a receiver using version 0 will not be able to decode the version 1 extensions
+-- The units of the environmental values should be interpreted differently
+-- See Annex I of ISO 8824-1:2008 for details
+
+DEFINITIONS AUTOMATIC TAGS ::= BEGIN
+
+-- Electronic Registration Identification (ERI)- Vehicle Data
+
+-- EXPORTS  everything;
+
+IMPORTS
+CS4, CS5 FROM AVIAEINumberingAndDataStructures {iso(1) standard(0) iso14816(14816) asnm1(1) version1(1)}
+
+VehicleDimensions, PassengerCapacity, VehicleWeightLimits, AxleWeightLimits, VehicleSpecificCharacteristics, TrailerCharacteristics, Engine, CO2EmissionValue, SoundLevel, ExhaustEmissionValues, DieselEmissionValues FROM ElectronicRegistrationIdentificationEfcVehicleDataModule {iso(1) standard(0) iso24534 (24534) efcVehicleData (3) version1 (1)} 
+
+;
+
+-- Vehicle Identifier
+
+
+VehicleId ::= CHOICE {
+		vin	VIN,	-- must be 17 characters
+		raSpecificVehicleId	RaSpecificVehicleId,
+		...
+		}
+
+
+-- VIN ::= VisibleString
+VIN ::= CS5
+
+RaSpecificVehicleId ::= SEQUENCE {
+	wmi	UTF8String (SIZE(3)),
+	nonIsoStandardId	UTF8String (SIZE (1..20))
+	}
+
+-- ERI data
+EriData ::= SEQUENCE {
+	vehicleId	VehicleId,
+	additionalEriData	AdditionalEriData OPTIONAL
+	}
+	
+AdditionalEriData ::= CHOICE {
+	additionalEriRegistrationData	AdditionalEriRegistrationData,   -- preferred choice
+	...,
+	raSpecificAdditionalEriData	OCTET STRING (SIZE (0..1024))
+		-- only to be used if AdditionalEriRegistrationData is not supported
+	}
+
+-- Additional ERI registration data
+
+AdditionalEriRegistrationData ::=  SEQUENCE {
+	-- Administrative data
+	registrationAuthority	RegistrationAuthority OPTIONAL,
+	vehicleIdStatus	VehicleIdStatus OPTIONAL,
+	dateOfFirstRegistration	DateOfFirstRegistration OPTIONAL,
+	dateOfRegistration	DateOfRegistration OPTIONAL,
+	validThru	ValidThru OPTIONAL,
+	chassisNumber	ChassisNumber (SIZE (1..23)) OPTIONAL,
+	registrationNumber	RegistrationNumber OPTIONAL,
+
+	-- Vehicle type
+	vehicleMake	VehicleMake OPTIONAL,
+	vehicleType	VehicleType OPTIONAL,
+	vehicleTypeStatus	VehicleTypeStatus OPTIONAL,
+	commercialDescription	CommercialDescription OPTIONAL,
+	typeApprovalNumber	TypeApprovalNumber OPTIONAL,
+	vehicleCategory	VehicleCategory OPTIONAL,
+	vehicleTaxCategory	VehicleTaxCategory OPTIONAL,
+	euVehicleCategoryCode	EuVehicleCategoryCode OPTIONAL,
+	raSpecificVehicleClass1	RaSpecificVehicleClass1 OPTIONAL,
+	raSpecificVehicleClass2	RaSpecificVehicleClass2 OPTIONAL,
+	raSpecificVehicleClass3	RaSpecificVehicleClass3 OPTIONAL,
+	vehicleUse	VehicleUse OPTIONAL,
+	privateUse	PrivateUse OPTIONAL,
+	colour	VehicleColour OPTIONAL,
+
+	-- Vehicle shape
+	length	VehicleLength OPTIONAL,
+	width	VehicleWidth OPTIONAL,
+	height	VehicleHeight OPTIONAL,
+	wheelbase	Wheelbase OPTIONAL,
+	bodyShape	VehicleBodyShape OPTIONAL,
+	euBodyWorkType	EuBodyWorkType OPTIONAL,
+	iso3833VehicleType	Iso3833VehicleType OPTIONAL,
+
+	-- Vehicle number of passengers, axles, and mass
+	numberOfSeats	NumberOfSeats OPTIONAL, 	-- including the driver seat
+	numberOfStandingPlaces	NumberOfStandingPlaces OPTIONAL,
+	maxNumberOfPassengers	MaxNumberOfPassengers OPTIONAL,	-- including the driver
+	unladenWeight	UnladenWeight OPTIONAL,
+	maxDesignLadenMass	MaxDesignLadenMass OPTIONAL,
+	maxAuthorizedLadenMass	MaxAuthorizedLadenMass OPTIONAL,
+	maxAuthorizedTrainMass	MaxAuthorizedTrainMass OPTIONAL,
+	maxAuthorizedPayload	MaxAuthorizedPayload OPTIONAL,
+
+	numberOfAxles	NumberOfAxles OPTIONAL,
+	authorizedAxleLadenMass	AuthorizedAxleLadenMass OPTIONAL, -- from front to rear axle
+	maxTowableMassBrakedTrailer	MaxTowableMassBrakedTrailer OPTIONAL,
+	maxTowableMassUnbrakedTrailer MaxTowableMassUnbrakedTrailer OPTIONAL,
+
+	-- Vehicle engine and power source
+	engineId	EngineId (SIZE (1..60)) OPTIONAL,
+	primeEngineType	PrimeEngineType OPTIONAL,
+	enginePowerSources	EnginePowerSources OPTIONAL,
+	primePowerSource	PrimePowerSource OPTIONAL,
+	engineMaxNetPower	EngineMaxNetPower OPTIONAL,
+	engineDisplacement	EngineDisplacement OPTIONAL,
+	ratedEngineSpeed	RatedEngineSpeed OPTIONAL,
+	powerWeightRatio	PowerWeightRatio OPTIONAL,
+	maxSpeed	MaxSpeed OPTIONAL,
+	fuelTanksCapacity	FuelTanksCapacity OPTIONAL,
+
+	-- Environmental characteristics
+	stationarySoundLevel	StationarySoundLevel OPTIONAL,
+	engineSpeed	EngineSpeed OPTIONAL,
+	driveBySoundLevel	DriveBySoundLevel OPTIONAL,
+	emissionCO	DriveBySoundLevel OPTIONAL,
+	emissionHC	EmissionHC OPTIONAL,
+	emissionNOx	EmissionNOx OPTIONAL,
+	emissionHCandNOx	EmissionHCandNOx OPTIONAL,
+	particulatesForDiesel	ParticulatesForDiesel OPTIONAL,
+	correctedAbsorptionCoefficient	CorrectedAbsorptionCoefficient OPTIONAL,
+	emissionCO2	EmissionCO2 OPTIONAL,
+	combinedFuelConsumption	CombinedFuelConsumption OPTIONAL,
+	environmentalCategory	EnvironmentalCategory OPTIONAL, 
+	euroType	EuroType OPTIONAL,
+
+	-- Others
+	lastOfficialTestData	OfficialVehicleTestData OPTIONAL,
+	...,
+	raSpecificData	RaSpecificData OPTIONAL,
+	axlesPerAxleGroup	AxlesPerAxleGroup OPTIONAL, 
+		-- from front to rear axle group
+	authorizedAxleGroupLadenMass	AuthorizedAxleGroupsLadenMass OPTIONAL,
+		-- from front to rear axle group
+
+	-- ERI data used for EFC (types imported from ElectronicRegistrationIdentificationEfcVehicleData
+	efcVehicleDimensions	VehicleDimensions,
+	efcPassengerCapacity	PassengerCapacity,
+	efcVehicleWeightLimits	VehicleWeightLimits,
+	efcAxleWeightLimits	AxleWeightLimits,
+	efcVehicleSpecificCharacteristics	VehicleSpecificCharacteristics,
+	efcTrailerCharacteristics	TrailerCharacteristics,
+	efcEngine	Engine,
+	efcSoundLevel	SoundLevel,
+	efcCO2EmissionValue	CO2EmissionValue,
+	efcExhaustEmissionValues	ExhaustEmissionValues,
+	efcDieselEmissionValues	DieselEmissionValues
+	}
+
+-- Administrative data
+RegistrationAuthority	::= EntityId
+VehicleIdStatus	::= Text60
+DateOfFirstRegistration	::= DATE
+DateOfRegistration	::= DATE
+ValidThru  	::= DATE
+ChassisNumber	::= UTF8String (SIZE (1..23)) -- incl. 3 WMI characters
+RegistrationNumber	::= CS4
+
+-- Vehicle type
+VehicleMake	::= Text60
+VehicleType	::= Text60
+VehicleTypeStatus	::= Text60
+CommercialDescription	::= Text60
+TypeApprovalNumber	::= UTF8String (SIZE (1..60))
+VehicleCategory	::= Text60
+VehicleTaxCategory	::= Text60
+RaSpecificVehicleClass1	::= Text60
+RaSpecificVehicleClass2	::= Text60
+RaSpecificVehicleClass3	::= Text60
+VehicleUse	::= Text60
+PrivateUse	::= BOOLEAN	-- False = commercial use
+VehicleColour	::= Text60
+
+
+EuVehicleCategoryCode ::= CHOICE {
+	euVehicleCategoryL	EuVehicleCategoryL,   -- conforms to EU 2002/24 and UNECE 1999
+	euVehicleCategoryM	EuVehicleCategoryM,   -- conforms to EU 2001/116 and UNECE 1999
+	euVehicleCategoryN	EuVehicleCategoryN,   -- conforms to EU 2001/116 and UNECE 1999
+	euVehicleCategoryO	EuVehicleCategoryO,   -- conforms to EU 2001/116 and UNECE 1999
+	euVehilcleCategoryT	NULL,    -- conforms to UNECE 1999
+	euVehilcleCategoryG	NULL     -- conforms to EU 2001/116 and UNECE 1999
+	}
+
+
+
+EuVehicleCategoryL ::= ENUMERATED { l1, l2, l3, l4, l5, l6, l7 }
+
+EuVehicleCategoryM ::= ENUMERATED {m1, m2, m3}
+
+EuVehicleCategoryN ::= ENUMERATED {n1, n2, n3}
+
+EuVehicleCategoryO ::= ENUMERATED {o1, o2, o3, o4}
+
+
+-- Vehicle shape
+VehicleLength	::= Millimetre
+VehicleWidth	::= Millimetre
+VehicleHeight	::= Millimetre
+Wheelbase	::= Millimetre
+VehicleBodyShape	::= Text60
+EuBodyWorkType	::= UTF8String (SIZE (2))	-- conforms to EU 2001/116
+
+Iso3833VehicleType ::= INTEGER {
+	passengerCar	(0),	-- term No 3.1.1
+	saloon	(1),	-- term No 3.1.1.1 (sedan)
+	convertibleSaloon	(2),	-- term No 3.1.1.2
+	pullmanSaloon	(3),	-- term No 3.1.1.3
+	stationWagon	(4),	-- term No 3.1.1.4
+	truckStationWagon	(5),	-- term No 3.1.1.4.1
+	coupe	(6),	-- term No 3.1.1.5 (coupé)
+	convertible	(7),	-- term No 3.1.1.6 (open tourer, roadstar, spider)
+	multipurposePassengerCar	(8),	-- term No 3.1.1.7
+	forwardControlPassengerCar	(9),	-- term No 3.1.1.8
+	specialPassengerCar	(10),	-- term No 3.1.1.9
+	bus	(11),	-- term No 3.1.2
+	minibus	(12),	-- term No 3.1.2.1
+	urbanBus	(13),	-- term No 3.1.2.2
+	interurbanCoach	(14),	-- term No 3.1.2.3
+	longDistanceCoach	(15),	-- term No 3.1.2.4
+	articulatedBus	(16),	-- term No 3.1.2.5
+	trolleyBus	(17),	-- term No 3.1.2.6
+	specialBus	(18),	-- term No 3.1.2.7
+	commercialVehicle	(19),	-- term No 3.1.3
+	specialCommercialVehicle	(20),	-- term No 3.1.3.1
+	specialVehicle	(21),	-- term No 3.1.4
+	trailingTowingVehicle	(22),	-- term No 3.1.5 (draw-bar tractor)
+	semiTrailerTowingVehicle	(23),	-- term No 3.1.6 (fifth wheel tractor)
+	trailer	(24),	-- term No 3.2.1
+	busTrailer	(25),	-- term No 3.2.1.1
+	generalPurposeTrailer	(26),	-- term No 3.2.1.2
+	caravan	(27),	-- term No 3.2.1.3
+	specialTrailer	(28),	-- term No 3.2.1.4
+	semiTrailer	(29),	-- term No 3.2.2
+	busSemiTrailer	(30),	-- term No 3.2.2.1
+	generalPurposeSemiTrailer	(31),	-- term No 3.2.2.2
+	specialSemiTrailer	(32),	-- term No 3.2.2.3
+	roadTrain	(33),	-- term No 3.3.1
+	passengerRoadTrain	(34),	-- term No 3.3.2
+	articulatedRoadTrain	(35),	-- term No 3.3.3
+	doubleRoadTrain	(36),	-- term No 3.3.4
+	compositeRoadTrain	(37),	-- term No 3.3.5
+	specialRoadTrain	(38),	-- term No 3.3.6
+	moped	(39),	-- term No 3.4
+	motorCycle	(40)	-- term No 3.5
+	} (0..255)
+
+-- Vehicle number of passengers, axles, and mass
+NumberOfSeats	::= INTEGER	-- including the driver seat
+NumberOfStandingPlaces	::= INTEGER
+MaxNumberOfPassengers	::= INTEGER	-- including the driver
+UnladenWeight	::= Kilogram
+MaxDesignLadenMass	::= Kilogram
+MaxAuthorizedLadenMass	::= Kilogram
+MaxAuthorizedTrainMass	::= Kilogram
+MaxAuthorizedPayload	::= Kilogram
+
+NumberOfAxles	::= INTEGER
+AxlesPerAxleGroup	::= SEQUENCE OF Int1	-- from front to rear axle group
+AuthorizedAxleLadenMass	::= SEQUENCE OF Kilogram	-- from front to rear axle
+AuthorizedAxleGroupsLadenMass	::= SEQUENCE OF Kilogram	-- from front to rear axle group
+MaxTowableMassBrakedTrailer	::= Kilogram
+MaxTowableMassUnbrakedTrailer 	::= Kilogram
+
+-- Vehicle engine and power source
+EngineId		::= UTF8String (SIZE (1..60))
+PrimeEngineType	::= Text60
+EnginePowerSources	::= SEQUENCE OF PowerSource	-- primary source first
+PrimePowerSource	::= PowerSource
+EngineMaxNetPower	::= Kilowatt
+EngineDisplacement	::= Millilitre
+RatedEngineSpeed	::= PerMinute
+PowerWeightRatio	::= KilowattPerKilogram
+MaxSpeed	::= KilometrePerHour
+FuelTanksCapacity	::= Litre
+
+PowerSource ::= INTEGER {
+	notPowered	(0),	
+	humanPowered	(1),
+	animalPowered	(2),	
+	unleadedPetrol	(3),
+	leadedPatrol	(4),	
+	diesel	(5),
+	bioDiesel	(6),	
+	alcohol	(7),
+	otherFuel	(8),	
+	lpg	(9),
+	hydrogen		(10),	
+	externalElectricPower	(11),
+	battery	(12),	
+	sun	(13),
+	other	(14)
+	} (0..255)
+
+-- Environmental characteristics
+
+StationarySoundLevel	::= DB
+EngineSpeed	::= PerMinute
+DriveBySoundLevel	::= DB
+EmissionCO	::= MgpkmOrMgpkwh
+EmissionHC	::= MgpkmOrMgpkwh
+EmissionNOx	::= MgpkmOrMgpkwh
+EmissionHCandNOx	::= MilligramPerKilometre
+ParticulatesForDiesel	::= MicrogrampkmOrMicrogrampkwh
+CorrectedAbsorptionCoefficient	::= PerKm
+EmissionCO2	::= GramPerKilometre
+CombinedFuelConsumption	::= MillilitrePerKilometre
+EnvironmentalCategory	::= Text60 
+
+EuroType ::= INTEGER {
+	non-euro	(0), 
+	euro-1	(1), 
+	euro-2	(2), 
+	euro-3	(3), 
+	euro-4	(4), 
+	euro-5	(5), 
+	euro-6	(6) 
+	} (0..255)
+
+-- Others
+OfficialVehicleTestData ::= SEQUENCE {
+	date	DATE OPTIONAL,
+	location	NameAndAddress OPTIONAL,
+	odometerValue	Kilometre OPTIONAL,
+	emissionCO	MgpkmOrMgpkwh OPTIONAL,
+	emissionHC	MgpkmOrMgpkwh OPTIONAL,
+	remarks	Text60 OPTIONAL,
+	...
+	}
+
+RaSpecificData ::= Text60
+
+--Measurement units 
+
+MgpkmOrMgpkwh ::= CHOICE {
+	milligramPerKilometre	MilligramPerKilometre,
+	milligramPerKilowattHour	MilligramPerKilowatthour
+	}
+
+MicrogrampkmOrMicrogrampkwh ::= CHOICE {
+	microgramPerKilometre	MicrogramPerKilometre,
+	microgramPerKilowattHour	MicrogramPerKilowatthour
+	}
+
+Kilogram 	::= 	INTEGER (0..MAX)
+Kilometre ::=	INTEGER (0..MAX)
+Millimetre ::=	INTEGER (0..MAX)
+PerKm	::=	INTEGER (0..MAX)
+Litre	::=	INTEGER (0..MAX)
+Millilitre	::=	INTEGER (0..MAX)
+Kilowatt	::= 	INTEGER (0..MAX)
+KilometrePerHour ::=	INTEGER (0..MAX)
+PerMinute ::=	INTEGER (0..MAX)
+DB	::=	INTEGER (0..MAX)
+GramPerKilometre ::= 	INTEGER (0..MAX)
+MilligramPerKilometre ::= 	INTEGER (0..MAX)
+MicrogramPerKilometre ::= 	INTEGER (0..MAX)
+MilligramPerKilowatthour ::=	INTEGER (0..MAX)
+MicrogramPerKilowatthour ::=	INTEGER (0..MAX)
+KilowattPerKilogram ::=	INTEGER (0..MAX)
+MillilitrePerKilometre ::=	INTEGER (0..MAX)	-- = litre per 1000 km
+
+--EntityId, names and addresses
+
+EntityId	::= OBJECT IDENTIFIER
+
+NameAndAddress ::= SEQUENCE {
+	name	Text60,
+	otherNamesOrInitials	Text60 OPTIONAL,
+	address	Text60
+	}
+
+--Text 
+
+Text60 ::= UTF8String (SIZE (1..60))
+
+--Integers 
+
+Int1 ::= INTEGER (0..255)
+
+END
+
+/*
+   The ASN.1 specification has been checked for conformance to the ASN.1
+   standards by OSS ASN.1 Studio
+*/

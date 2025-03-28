@@ -1,0 +1,8 @@
+FROM ubuntu:latest
+
+RUN apt-get update && apt-get install -y curl jq
+
+COPY ./nifi/nifi-init.sh /opt/scripts/nifi-init.sh
+RUN chmod +x /opt/scripts/nifi-init.sh
+
+CMD ["/opt/scripts/nifi-init.sh"]

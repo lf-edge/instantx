@@ -1,0 +1,88 @@
+openapi: 3.0.0
+info:
+  title: InstantX - EventPublisher
+  version: 2.0.0
+  contact:
+    email: instantxsupport@vodafone.com
+servers:
+  - url: http://localhost:5000/api
+components:
+  securitySchemes:
+    noauthAuth:
+      type: http
+      scheme: noauth
+paths:
+  /publish/denm/{sub_service_group}/{geohash}:
+    post:
+      tags:
+        - default
+      summary: Publish DENM message
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                header:
+                  protocolVersion: 2
+                  messageID: 1
+                  stationID: 123456
+                denm:
+                  management:
+                    actionID:
+                      originatingStationID: 123456
+                      sequenceNumber: 1
+                    detectionTime: 649940045094
+                    referenceTime: 649940045094
+                    eventPosition:
+                      latitude: 367225309
+                      longitude: -43965883
+                      positionConfidenceEllipse:
+                        semiMajorConfidence: 4095
+                        semiMinorConfidence: 4095
+                        semiMajorOrientation: 3601
+                      altitude:
+                        altitudeValue: 0
+                        altitudeConfidence: unavailable
+                    relevanceDistance: lessThan500m
+                    validityDuration: 60
+                    stationType: 10
+                  situation:
+                    informationQuality: 0
+                    eventType:
+                      causeCode: 95
+                      subCauseCode: 0
+                  location:
+                    eventPositionHeading:
+                      headingValue: 0
+                      headingConfidence: 127
+                    traces:
+                      - - pathPosition:
+                            deltaLatitude: 2117
+                            deltaLongitude: 5821
+                            deltaAltitude: 0
+      security:
+        - noauthAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: sub_service_group
+          in: path
+          schema:
+            type: string
+          required: true
+          example: public
+        - name: geohash
+          in: path
+          schema:
+            type: string
+          required: true
+          example: 7y0191k4
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}

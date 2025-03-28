@@ -1,0 +1,6 @@
+Copyright (c) <dates>, <Copyright Holder> (<URL|email>),
+Copyright (c) <dates>, <additional Copyright Holder> (<URL|email>),
+Copyright (c) <dates>, <additional Copyright Holder> (<URL|email>).
+
+This Font Software is licensed under the Ubuntu Font Licence, Version
+1.0.  https://launchpad.net/ubuntu-font-licence

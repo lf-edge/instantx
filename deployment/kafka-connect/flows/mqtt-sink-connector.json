@@ -1,0 +1,26 @@
+{
+  "name": "MQTTSinkConnector",
+  "config": {
+    "connector.class": "com.instantx.kafka.connectors.MQTTSinkConnector",
+    "tasks.max": "1",
+	"key.converter": "org.apache.kafka.connect.storage.StringConverter",
+	"value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+	"topics.regex": "v2x.(cam|denm).*",
+	"mqtt.broker": "tcp://mqtt:1883",
+	"mqtt.clientID": "clientSink",
+	"mqtt.qos": "1",
+	"mqtt.automaticReconnect": "true",
+	"mqtt.keepAliveInterval": "10000",
+	"mqtt.cleanSession": "true",
+	"mqtt.connectionTimeout": "1000",
+	"mqtt.connector.auth": "false",
+	"mqtt.connector.auth.userName": "",
+	"mqtt.connector.auth.password": "",
+	"mqtt.connector.ssl": "false",
+	"mqtt.connector.ssl.ca": "",
+	"buffer.enable": "false",
+	"buffer.size": "2",
+	"buffer.flush.frequency": "1000"
+  }
+}
+

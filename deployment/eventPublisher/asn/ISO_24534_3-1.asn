@@ -1,0 +1,226 @@
+--<OSS.PDU>-- 
+
+-- ISO 24534-3:2010 Amd 1
+-- Version 29.4.2015
+
+
+ElectronicRegistrationIdentificationEfcVehicleDataModule {iso(1) standard(0) iso24534 (24534) efcVehicleData (3) version1 (1)} DEFINITIONS AUTOMATIC TAGS ::= BEGIN
+
+IMPORTS 
+CountryCode FROM AVIAEINumberingAndDataStructures {iso(1) standard(0) iso14816(14816) asnm1(1) version1(1)}
+;
+
+-- Vehicle dimensions
+
+VehicleDimensions ::= SEQUENCE {
+	vehicleLengthOverall	Int1,
+	vehicleHeigthOverall	Int1,
+	vehicleWidthOverall	Int1
+	}
+
+-- Passengers capicity
+
+PassengerCapacity ::= SEQUENCE{
+	numberOfSeats	Int1,
+	numberOfStandingPlaces	Int1
+	}
+
+-- Vehicle weight limits
+
+VehicleWeightLimits ::= SEQUENCE {
+	vehicleMaxLadenWeight	Int2,
+	vehicleTrainMaximumWeight	Int2,
+	vehicleWeightUnladen	Int2
+	}
+
+-- Axle weight limits
+
+AxleWeightLimits ::= SEQUENCE{
+	maxLadenweightOnAxle1	Int2,
+	maxLadenweightOnAxle2	Int2,
+	maxLadenweightOnAxle3	Int2,
+	maxLadenweightOnAxle4	Int2,
+	maxLadenweightOnAxle5	Int2
+	}
+
+-- Vehicle Specific Characteristics
+
+VehicleSpecificCharacteristics ::= SEQUENCE {
+	environmentalCharacteristics	EnvironmentalCharacteristics,
+	engineCharacteristics	EngineCharacteristics,
+	descriptiveCharacteristics	DescriptiveCharacteristics,
+	futureCharacteristics	FutureCharacteristics
+	}
+
+EnvironmentalCharacteristics::= SEQUENCE {
+	euroValue	EuroValue,
+	copValue	CopValue
+	}
+
+EuroValue::= INTEGER {
+	noEntry	(0),
+	euro-1	(1),
+	euro-2	(2),
+	euro-3	(3),
+	euro-4	(4),
+	euro-5	(5),
+	euro-6	(6)
+	} (0..15) -- 4 bits, EURO-Clases as defined in EC directive 88/77/EEC, annex 1
+	-- and in 91/542/EEC, 96/1/EC, 1999/96/EC, 2001/27/EC
+
+CopValue ::= INTEGER	{
+	noEntry	(0),
+	co2class1	(1),	-- below 101 g/km
+	co2class2	(2),	-- 101 to 120 g/km
+	co2class3	(3),	-- 121 to 140 g/km
+	co2class4	(4),	-- 141 to 160 g/km
+	co2class5	(5),	-- 161 to 200 g/km
+	co2class6	(6),	-- 201 to 250 g/km
+	co2class7	(7)	-- above 250 g/km
+	} (0..15)  -- 4 bits, reserved for carbon dioxide pollution values as defined in
+	     -- EC directive 2003/127/EC
+
+EngineCharacteristics::= INTEGER {
+	noEntry	(0),
+	noEngine	(1),
+	petrolUnleaded	(2),
+	petrolLeaded	(3),
+	diesel	(4),
+	lPG	(5),
+	battery	(6),
+	solar	(7)
+	-- (8-255) are reserved for future CEN use
+	} (0..255)
+
+DescriptiveCharacteristics ::= INTEGER {
+	noEntry	(0),
+	vehicleShape1 	(1),
+	vehicleShape2 	(2),
+	vehicleShape3 	(3),
+	vehicleShape4 	(4),
+	vehicleShape5 	(5),
+	vehicleShape6 	(6),
+	vehicleShape7 	(7),
+	vehicleShape8 	(8),
+	vehicleShape9 	(9),
+	vehicleShape10	(10),
+	vehicleShape11	(11),
+	vehicleShape12	(12),
+	vehicleShape13	(13),
+	vehicleShape14	(14),
+	vehicleShape15	(15),
+	vehicleShape16	(16),
+	vehicleShape17	(17),
+	vehicleShape18	(18),
+	vehicleShape19	(19),
+	vehicleShape20	(20),
+	vehicleShape21	(21),
+	vehicleShape22	(22),
+	vehicleShape23	(23),
+	vehicleShape24	(24),
+	vehicleShape25	(25),
+	vehicleShape26	(26),
+	vehicleShape27	(27),
+	vehicleShape28	(28),
+	vehicleShape29	(29),
+	vehicleShape30	(30),
+	vehicleShape31	(31),
+	vehicleShape32	(32),
+	vehicleShape33	(33),
+	vehicleShape34	(34),
+	vehicleShape35	(35),
+	vehicleShape36	(36),
+	vehicleShape37	(37),
+	vehicleShape38	(38),
+	vehicleShape39	(39),
+	vehicleShape40	(40),
+	vehicleShape41	(41),
+	vehicleShape42	(42),
+	vehicleShape43	(43),
+	vehicleShape44	(44),
+	vehicleShape45	(45),
+	vehicleShape46	(46),
+	vehicleShape47	(47),
+	vehicleShape48	(48),
+	vehicleShape49	(49),
+	vehicleShape50	(50)
+	-- (1..50) are reserved for future CEN ISO use
+	-- (51..255) are reserved for private use
+	} (0..255)
+
+FutureCharacteristics ::= INTEGER {
+	noEntry	(0),
+	airSuspension	(1)
+	-- (2..255) are reserved for future CEN use
+	} (0..255)
+
+-- Trailer Characteristics
+
+TrailerCharacteristics ::= SEQUENCE {
+	trailerDetails	TrailerDetails,
+	trailerMaxLadenWeight	Int2,
+	trailerWeightUnladen	Int2
+	}
+
+TrailerDetails::= SEQUENCE {
+	trailerType	TrailerType,
+	trailerAxles	TrailerAxles
+	}
+
+TrailerType ::= INTEGER{
+	notPresent (0),	-- trailer not attached or only one trailer attached, see
+		-- VehicleAxlesNumber for more information
+	trailer (1),	-- also known as pull-bar trailer
+	semitrailer (2)	-- also known as articulate trailer
+	-- (3..31) reserved for future CEN/ISO use
+	} (0..31)
+
+TrailerAxles ::= INTEGER (0..7) -- number of axles of the trailer when available
+
+-- Engine
+
+Engine ::= SEQUENCE{
+	engineCapacity	Int2,
+	enginePower	Int2
+	}
+
+-- Environmental characteristics
+
+SoundLevel ::= SEQUENCE{
+	soundstationary	Int1,
+	sounddriveby	Int1
+	}
+
+CO2EmissionValue ::= Int2
+
+ExhaustEmissionValues ::= SEQUENCE {
+	unitType	UnitType,
+	emissionCO	INTEGER (0..32766),
+	emissionHC	Int2,
+	emissionNOX	Int2,
+	emissionHCNOX	Int2
+	}
+
+DieselEmissionValues ::= SEQUENCE {
+	unitType	UnitType,
+	particulate 	INTEGER (0.. 32767),
+	absorptionCoeff 	Int2
+	}
+
+UnitType ::= ENUMERATED {
+	mg-km,
+	mg-kWh
+	}
+
+Int1 ::= INTEGER(0..255)
+
+Int2 ::= INTEGER(0..65535)
+
+Int4 ::= INTEGER(0..4294967295)
+
+END
+
+/*
+   The ASN.1 specification has been checked for conformance to the ASN.1
+   standards by OSS ASN.1 Studio
+*/
