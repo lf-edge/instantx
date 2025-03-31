@@ -103,7 +103,7 @@ Please refer to [Release notes](./RELEASE.md) document for detailed information
 
 ## Licenses
 
-This project is released under [Apache 2.0 License](./LICENSE).
+This project is released under [multiple licenses](./LICENSE).
 
 [V2X]: https://en.wikipedia.org/wiki/Vehicle-to-everything
 [MQTT]: https://mqtt.org/
