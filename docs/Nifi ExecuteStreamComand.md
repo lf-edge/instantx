@@ -20,7 +20,7 @@ Before using the ExecuteStreamCommand processor, ensure the following:
 - The script or command you want to execute is installed and accessible on the NiFi server.
 - Required permissions are granted to execute the script or command.
 
-## ##3. Configuring the Processor
+## 3. Configuring the Processor
 
 Steps to Configure: - Drag and drop the ExecuteStreamCommand processor onto the NiFi canvas.
 
