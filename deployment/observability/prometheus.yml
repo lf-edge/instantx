@@ -2,15 +2,19 @@ global:
   scrape_interval: 15s
 
 scrape_configs:
-  - job_name: 'api_service'
+  - job_name: "api_service"
     static_configs:
-      - targets: ['api-service:8000']  # Replace with the appropriate address
+      - targets: ["api-service:8000"] # Replace with the appropriate address
 
-  - job_name: 'hivemq'
+  - job_name: "hivemq"
     static_configs:
-      - targets: ['hivemq_ce:9399']
+      - targets: ["mqtt:9399"]
 
-  - job_name: 'nifi'
+  - job_name: "nifi"
     fallback_scrape_protocol: PrometheusText0.0.4
     static_configs:
-      - targets: ['nifi:9094']
+      - targets: ["nifi:9094"]
+
+  - job_name: "kafka_speed_exporter"
+    static_configs:
+      - targets: ["kafka_speed_exporter:8010"]
