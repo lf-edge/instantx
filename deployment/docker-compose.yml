@@ -16,7 +16,7 @@ services:
       - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
       - default
-      - nifi_network  
+      - nifi_network
   # ---------------------------------------------
   # Observability (Grafana)
   grafana:
@@ -29,7 +29,7 @@ services:
       - ./observability/grafana-provisioning/datasources:/etc/grafana/provisioning/datasources
     depends_on:
       - prometheus
-  
+
   # ---------------------------------------------
   # Broker (MQTT) - HiveMQ CE
   mqtt:
@@ -46,7 +46,9 @@ services:
       - ./mqtt/extensions/hivemq-prometheus-extension/:/opt/hivemq/extensions/hivemq-prometheus-extension/
       - ./mqtt/extensions/hivemq-extension-poc/:/opt/hivemq/extensions/hivemq-extension-poc/
     restart: always
-  
+    networks:
+      - nifi_network
+
   # ---------------------------------------------
   # Apache Kafka
   kafka:
@@ -62,49 +64,26 @@ services:
       KAFKA_PROCESS_ROLES: broker,controller
       #KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181      
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://kafka:9093
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL,CONTROLLER:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1      
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_NUM_PARTITIONS: 3
-      
-      #KAFKA_LISTENERS: PLAINTEXT://:19092,PLAINTEXT_HOST://:9092,CONTROLLER://localhost:9093
-      #KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:19092,EXTERNAL://localhost:9092,PLAINTEXT_HOST://localhost:29092,CONTROLLER://localhost:9093
-      #KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:19092,EXTERNAL://localhost:9092,PLAINTEXT_HOST://localhost:29092
-      #KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      #KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      #KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      #KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+
     healthcheck:
-      #test: /opt/kafka/bin/kafka-cluster.sh cluster-id --bootstrap-server kafka:9092 || exit 1
-      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-cluster.sh cluster-id --bootstrap-server localhost:9092"]
+      test: ["CMD", "bash", "-c", "echo > /dev/tcp/localhost/9092"]
       interval: 2s
       timeout: 60s
       retries: 15
-  
-  # ---------------------------------------------
-  # TO DELETE!!!!
-  kafka-ui2:
-    image: provectuslabs/kafka-ui:latest
-    ports:
-      - 8980:8080
-    environment:
-      KAFKA_CLUSTERS_0_NAME: local
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: PLAINTEXT://kafka:9092
-      DYNAMIC_CONFIG_ENABLED: 'true'
-      #KAFKA_CLUSTERS_0_METRICS_PORT: 9101
-      #KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://host.docker.internal:8081
-      #KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME: first
-      #KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS: http://host.docker.internal:8083
-    depends_on:
-      - kafka
-  
+    networks:
+      - nifi_network
+
   # ---------------------------------------------
   # Kafka Connect (Confluent)
   connect:
@@ -142,26 +121,17 @@ services:
         #
         sleep 100 &&
         curl -X POST -H "Content-Type: application/json" --data @/mqtt-sink-connector.json http://connect:8083/connectors &&
-        curl -X POST -H "Content-Type: application/json" --data @/mqtt-source-connector.json http://connect:8083/connectors &&     
+        curl -X POST -H "Content-Type: application/json" --data @/mqtt-source-connector.json http://connect:8083/connectors &&
         sleep infinity
     volumes:
       - ./kafka-connect/connectors:/etc/kafka-connect/jars
-      - ./kafka-connect/flows/mqtt-sink-connector.json:/mqtt-sink-connector.json      
+      - ./kafka-connect/flows/mqtt-sink-connector.json:/mqtt-sink-connector.json
       - ./kafka-connect/flows/mqtt-source-connector.json:/mqtt-source-connector.json
     depends_on:
       - kafka
-  
-  # ---------------------------------------------
-  # TO DELETE!!!!
-  kafka-connect-ui2:
-    image: landoop/kafka-connect-ui:latest
-    ports:
-      - 8000:8000
-    environment:
-      CONNECT_URL: http://connect:8083
-    depends_on:
-      - connect
-  
+    networks:
+      - nifi_network
+
   # ---------------------------------------------
   # API Service (Example)
   api-service:
@@ -177,7 +147,9 @@ services:
         restart: true
       prometheus:
         condition: service_started
-  
+    networks:
+      - nifi_network
+
   # ---------------------------------------------
   # Apache Zookeeper
   zookeeper:
@@ -194,13 +166,13 @@ services:
       ZOOKEEPER_SERVERS: zookeeper:2888:3888
     networks:
       - nifi_network
-  
+
   # ---------------------------------------------
-  # NiFi Registry (Upgraded to 1.18.0)
+  # NiFi Registry (Upgraded to 1.19.0)
   nifiregistry:
     hostname: nifiregistry
     container_name: instantx_nifi_registry
-    image: apache/nifi-registry:1.18.0
+    image: apache/nifi-registry:1.19.0
     restart: on-failure
     user: "0:0"
     ports:
@@ -215,16 +187,16 @@ services:
       - nifi-registry-flow:/opt/nifi-registry/nifi-registry-current/flow_storage
     networks:
       - nifi_network
-  
+
   # ---------------------------------------------
-  # Apache NiFi (Upgraded to 1.18.0)
+  # Apache NiFi (Upgraded to 1.19.0)
   nifi:
     hostname: nifi
     container_name: instantx_nifi
     build:
       context: .
       dockerfile: ./nifi/Dockerfile.nifi
-    #image: apache/nifi:1.18.0
+    image: apache/nifi:1.19.0
     restart: on-failure
     ports:
       - 8090:8080
@@ -253,25 +225,12 @@ services:
       - ./nifi/asn:/var/lib/nifi/scripts/asn
       - ./nifi/custom-nars/nifi-amqpconsumer-nar-1.3.nar:/opt/nifi/nifi-current/lib/nifi-amqpconsumer-nar-1.3.nar
       - ./nifi/custom-nars/nifi-geohash-nar-1.3.5.nar:/opt/nifi/nifi-current/lib/nifi-geohash-nar-1.3.5.nar
-      - ./nifi/nifi-scripts/encoder_decoder.py:/var/lib/nifi/scripts/encoder_decoder.py
+      - ./nifi/nifi-scripts/src/encoder_decoder.py:/var/lib/nifi/scripts/encoder_decoder.py
       - ./nifi/transformations/transform_denm.xslt:/var/lib/nifi/xslt/transform_denm.xslt
-    #$command: >
-    #$  bash -c "
-    #$  apt-get update &&
-    #$  apt-get install -y python3 python3-pip &&
-    #$  pip3 install xmltodict asn1tools &&
-    #$  exec /opt/nifi/nifi-current/bin/nifi.sh run"
-    #$command:
-    #$  - bash
-    #$  - -c
-    #$  - |
-    #$    apt-get update &&
-    #$    apt-get install -y python3 python3-pip &&
-    #$    pip3 install xmltodict asn1tools &&
-    #$    exec /opt/nifi/nifi-current/bin/nifi.sh run
+      - ./nifi/protoLib:/opt/nifi/external_libs
     networks:
       - nifi_network
-  
+
   # ---------------------------------------------
   # NiFi Init Script for Prometheus Task & Flow Bootstrap
   nifi-setup:
@@ -279,6 +238,7 @@ services:
       context: .
       dockerfile: ./nifi/Dockerfile.nifi-init
     container_name: instantx_setup
+    platform: linux/amd64
     depends_on:
       nifi:
         condition: service_healthy
@@ -290,7 +250,22 @@ services:
       - NIFI_REGISTRY_URL=http://nifiregistry:18080
     volumes:
       - ./nifi/flows/integrator-framework/v1/flow.json:/opt/nifi/flow.json
-  
+
+  # ---------------------------------------------
+  # Kafka Speed Exporter (Custom Service)
+  kafka_speed_exporter:
+    build:
+      context: ./kafka_speed_exporter
+      dockerfile: Dockerfile
+    container_name: instantx_kafka_speed_exporter
+    ports:
+      - "8010:8010"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    networks:
+      - nifi_network
+
 networks:
   nifi_network:
     driver: bridge
@@ -305,4 +280,3 @@ volumes:
   nifi-logs:
   nifi-registry-db:
   nifi-registry-flow:
-
