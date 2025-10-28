@@ -3,7 +3,10 @@ FROM apache/nifi:1.19.0
 USER root
 
 # Install Python and pip
-RUN apt-get update && apt-get install -y python3 python3-pip
+RUN sed -i 's|http://|https://|g' /etc/apt/sources.list /etc/apt/sources.list.d/*.list 2>/dev/null || true \
+ && apt-get -o Acquire::Retries=5 update \
+ && apt-get install -y python3 python3-pip
+
 
 # Install required Python libraries
 RUN pip3 install xmltodict asn1tools
