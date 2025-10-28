@@ -144,11 +144,11 @@ services:
     depends_on:
       kafka:
         condition: service_healthy
-        restart: true
       prometheus:
         condition: service_started
     networks:
       - nifi_network
+
 
   # ---------------------------------------------
   # Apache Zookeeper
