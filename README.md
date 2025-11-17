@@ -41,9 +41,6 @@ InstantX offers significant benefits:
 - Distributing messages (esp. [V2X] messages) using the GeoHash structure
 <img src="./images/UseCases1.png" height="70" width="auto">
 
-- Exposing ETSI-ITS data (DENM) from road users through APIs
-<img src="./images/UseCases2.png" height="70" width="auto">
-
 - Ingesting DENM data through APIs from external provider
 <img src="./images/UseCases3.png" height="70" width="auto">
 
@@ -64,7 +61,7 @@ InstantX offers significant benefits:
 
 ### Container Diagram
 
-![Target Architecture](./images/InstantX_arch.png)
+![Target Architecture](./images/architecture_upd.png)
 
 ## Additional information
 
