@@ -27,7 +27,7 @@ Install dependencies:
 
     ```python
     # Address of the Kafka broker, which is the server that manages the Kafka cluster.
-    KAFKA_BROKER = 'kafka:29092'
+    KAFKA_BROKER = 'kafka:9092'
 
     # The Kafka topic where DENM/IVIM data will be published.
     KAFKA_TOPIC = 'v2x.denm.public'
