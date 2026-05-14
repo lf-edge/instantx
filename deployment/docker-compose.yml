@@ -92,7 +92,8 @@ services:
     ports:
       - 8083:8083
     environment:
-      CONNECT_BOOTSTRAP_SERVERS: SASL_PLAINTEXT://kafka:9092
+      CONNECT_BOOTSTRAP_SERVERS: kafka:9092
+      CONNECT_SECURITY_PROTOCOL: PLAINTEXT
       CONNECT_REST_PORT: 8083
       CONNECT_GROUP_ID: kafka-connect
       CONNECT_CONFIG_STORAGE_TOPIC: kc_connect-configs
