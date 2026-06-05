@@ -13,7 +13,7 @@ packages = [{include = "src"}]
 
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.3.5"
+pytest = "^9.0.3"
 pytest-cov = "^6.1.1"
 ruff = "^0.6.0"
 bandit = "^1.7.0"
