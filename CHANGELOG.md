@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allowlist input validation and a request-size limit on the Event Publisher API.
 - `GOVERNANCE.md`, `ROADMAP.md`, `docs/Threat-Model.md`, and `docs/Security-Architecture.md`.
 - Developer Certificate of Origin (DCO) sign-off requirement (documented in `CONTRIBUTING.md`, enforced in CI).
+- Release-signing workflow (`.github/workflows/release.yml`): on every `v*` tag, builds a source archive and signs it with cosign (keyless, Sigstore) before publishing a GitHub Release.
 
 ### Changed
 
