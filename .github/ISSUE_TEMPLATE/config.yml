@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Questions & Discussions
+    url: https://github.com/lf-edge/instantx/discussions
+    about: Ask questions, share use cases, and discuss ideas here.
+  - name: Security vulnerability (private)
+    url: https://github.com/lf-edge/instantx/security/policy
+    about: Do not open a public issue for security problems. Report them privately per our Security Policy.

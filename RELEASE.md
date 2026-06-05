@@ -12,12 +12,14 @@ Included documentation related with:
 - Updated [General documentation](./README.md)
   - [Kafka](./docs/Kafka.md)
   - [NiFi](./docs/Nifi%20ExecuteStreamComand.md)
-- [Code of Conduct](./docs/CODE_OF_CONDUCT.md)
-- [Contribution](./docs/CONTRIBUTION.md)
-- [Maintainers](./docs/MAINTAINERS.md)
-- [Security](./docs/SECURITY.md)
-- [Support](./docs/SUPPORT.md)
+- [Code of Conduct](./CODE_OF_CONDUCT.md)
+- [Contributing](./CONTRIBUTING.md)
+- [Maintainers](./MAINTAINERS.md)
+- [Security](./SECURITY.md)
+- [Support](./SUPPORT.md)
 - [License](./LICENSE.md)
+
+**Security:** No publicly known run-time vulnerabilities were fixed in this release.
 
 Included additional repositories:
 - [instantx-metrics](https://github.com/lf-edge/instantx-metrics)

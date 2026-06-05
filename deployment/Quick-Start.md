@@ -42,6 +42,8 @@ Inside Grafana, there is a dashboard with standard metrics related to publish/su
   - <u>Username</u>: _admin_
   - <u>Password</u>: _admin_
 
+> ⚠️ **Security note:** The credentials above are **default development values** shipped for a quick local start. They are **not** secrets and grant access only to a freshly deployed local stack. **Change all default credentials before deploying to any shared or production environment**, and supply real secrets via environment variables / `.env` files (which are git-ignored), never by committing them to the repository.
+
 ### API Service
 
 Please refer to the [documentation](../docs/Event-Publisher-oas.yaml) for details on how to use API Service.

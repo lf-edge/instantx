@@ -16,12 +16,13 @@
 # limitations under the License.
 # =========================LICENSE_END==================================
 
-import sys
-import asn1tools
 import os
-import xmltodict
+import sys
 from binascii import hexlify
-from typing import Any, Dict, List, Union
+from typing import Any, Union
+
+import asn1tools
+import xmltodict
 
 
 def convert_dictionary(data: Union[dict, list]) -> None:
@@ -88,9 +89,9 @@ def convert_dictionary(data: Union[dict, list]) -> None:
 
 
 def replace_specific_values(
-    data: Union[Dict[str, Any], List[Any]],
-    predefined_keys: List[str],
-    special_keys: List[str],
+    data: Union[dict[str, Any], list[Any]],
+    predefined_keys: list[str],
+    special_keys: list[str],
 ) -> None:
     """
     Recursively traverses a nested dictionary or list and replaces specific
@@ -225,13 +226,13 @@ def main():
     print(message)
 
 
-try:
-    main()
-
-    if __name__ == "__main__":
+if __name__ == "__main__":
+    # NiFi (ExecuteStreamCommand) runs this module as a script and feeds the
+    # XML payload on stdin. Guarding the call keeps the module importable for
+    # tests without executing main() (which would block on stdin).
+    try:
+        main()
         sys.exit(0)
-except asn1tools.codecs.EncodeError as e:
-    sys.stderr.write(f"EncodeError: {e}\n")
-
-    if __name__ == "__main__":
+    except asn1tools.codecs.EncodeError as e:
+        sys.stderr.write(f"EncodeError: {e}\n")
         sys.exit(1)

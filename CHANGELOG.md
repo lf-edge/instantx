@@ -7,7 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-...
+### Added
+
+- Root-level `CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md`, `SUPPORT.md`, and `MAINTAINERS.md` for standard discoverability (GitHub community health files).
+- `docs/Development.md` describing build, test, lint (`ruff`), and static analysis (`bandit`) workflows.
+- `.github/` pull request and issue templates.
+- `ruff` (linting) and `bandit` (static analysis) configuration for first-party Python code.
+- OpenSSF Best Practices badge in the README.
+
+### Changed
+
+- Moved governance documentation from `docs/` to the repository root and fixed internal links.
+- Rewrote `SUPPORT.md` (previously a duplicate of the contribution guide) with real support channels.
+
+### Fixed
+
+- Replaced a hardcoded absolute `DATA_FOLDER` path in the NiFi script tests with a path relative to the test file, so the suite runs on any machine.
+
+### Security
+
+- No publicly known run-time vulnerabilities have been reported or fixed.
 
 ## 2.0.0 - 2025-03-28
 
