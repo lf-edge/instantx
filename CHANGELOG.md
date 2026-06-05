@@ -26,7 +26,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-- No publicly known run-time vulnerabilities have been reported or fixed.
+- Updated Werkzeug to 3.1.6 to remediate the moderate `safe_join` Windows device-name advisories (CVE-2025-66221, CVE-2026-21860, CVE-2026-27199).
+- Updated pytest (dev dependency) to 9.0.3 to remediate the tmpdir handling advisory (CVE-2025-71176).
+- Added `.github/dependabot.yml` to monitor dependencies for future advisories.
+- No publicly known run-time vulnerabilities affect the first-party code itself.
 
 ## 2.0.0 - 2025-03-28
 

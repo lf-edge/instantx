@@ -1,0 +1,21 @@
+version: 2
+updates:
+  # Event Publisher (pip / requirements.txt)
+  - package-ecosystem: "pip"
+    directory: "/deployment/eventPublisher"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # NiFi scripts (Poetry / pyproject.toml)
+  - package-ecosystem: "pip"
+    directory: "/deployment/nifi/nifi-scripts"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # GitHub Actions workflows (for when CI is added)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
