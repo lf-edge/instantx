@@ -1,6 +1,13 @@
 ![InstantX logo](./images/logo.png)
 
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/12224/badge)](https://www.bestpractices.dev/projects/12224)
+[![CI](https://github.com/lf-edge/instantx/actions/workflows/ci.yml/badge.svg)](https://github.com/lf-edge/instantx/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/lf-edge/instantx?sort=semver)](https://github.com/lf-edge/instantx/releases)
+[![Signed with cosign](https://img.shields.io/badge/release-signed%20(cosign)-5b3bb3?logo=sigstore&logoColor=white)](https://github.com/lf-edge/instantx/blob/main/RELEASE.md#release-process--signature-verification)
+[![License: MIT + Apache-2.0](https://img.shields.io/badge/license-MIT%20%2B%20Apache--2.0-blue)](https://github.com/lf-edge/instantx/blob/main/LICENSE.md)
+[![Python](https://img.shields.io/badge/python-3.9%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![Security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
 
 ### Table of Contents
 
