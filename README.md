@@ -1,4 +1,4 @@
-![Alt text](./images/logo.png)
+![InstantX logo](./images/logo.png)
 
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/12224/badge)](https://www.bestpractices.dev/projects/12224)
 
@@ -41,13 +41,13 @@ InstantX offers significant benefits:
 ### Use Cases
 
 - Distributing messages (esp. [V2X] messages) using the GeoHash structure
-<img src="./images/UseCases1.png" height="70" width="auto">
+<img src="./images/UseCases1.png" height="70" width="auto" alt="Distributing V2X messages using the geohash structure">
 
 - Ingesting DENM data through APIs from external provider
-<img src="./images/UseCases3.png" height="70" width="auto">
+<img src="./images/UseCases3.png" height="70" width="auto" alt="Ingesting DENM data through APIs from an external provider">
 
 - Providing an Integration framework with [AMQP] support
-<img src="./images/UseCases4Custom.png" height="55" width="auto">
+<img src="./images/UseCases4Custom.png" height="55" width="auto" alt="Integration framework with AMQP support">
 
 ## Architecture
 
@@ -55,11 +55,13 @@ InstantX offers significant benefits:
 
 ### System Context Diagram
 
-<img src="./images/SystemContext.png" height="350" width="auto">
+<img src="./images/SystemContext.png" height="350" width="auto" alt="InstantX system context diagram">
 
 ### Roadmap
 
-> **Disclaimer:** The current state of the project represents a foundational stage, serving as an initial point of reference. Rest assured, our team is committed to releasing additional components to enhance the project's functionality in the near future.
+See **[ROADMAP.md](./ROADMAP.md)** for the project's direction (now / next / later).
+
+> **Disclaimer:** The roadmap is indicative, not a commitment; priorities evolve with community needs and contributions.
 
 ### Container Diagram
 

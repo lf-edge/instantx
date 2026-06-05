@@ -1,3 +1,30 @@
+# Releases
+
+InstantX uses [Semantic Versioning](https://semver.org/). The notes below summarize the major changes per version; see [CHANGELOG.md](./CHANGELOG.md) for the detailed log.
+
+## Release process & signature verification
+
+Releases are identified by **signed Git tags**, signed with [Sigstore `gitsign`](https://github.com/sigstore/gitsign) (keyless signing via OIDC — no long-lived keys to manage). To verify a release tag, install `gitsign` and verify the tag, e.g.:
+
+```sh
+gitsign verify-tag \
+  --certificate-oidc-issuer="https://token.actions.githubusercontent.com" \
+  --certificate-identity-regexp="lf-edge/instantx" \
+  <tag>
+```
+
+Adjust the `--certificate-identity`/`--certificate-oidc-issuer` to match the maintainer or CI workflow that produced the signature (see the gitsign documentation). The release-manager role is described in [GOVERNANCE.md](./GOVERNANCE.md).
+
+## Upgrade path
+
+Versions follow SemVer: upgrades within the same MAJOR are backward compatible. To upgrade, check out the new tag and rebuild the stack:
+
+```sh
+git fetch --tags && git checkout <new-tag>
+cd deployment && docker-compose up --build -d
+```
+
+Breaking changes (MAJOR bumps) and any required migration steps are called out in the release notes below and in [CHANGELOG.md](./CHANGELOG.md).
 
 ## Release 2.0.0
 

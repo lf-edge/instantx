@@ -20,9 +20,20 @@ Please include as much of the information listed below as you can to help us bet
 
 This information will help us triage your report more quickly.
 
-## Response Time
+## Disclosure and Response Process
 
-We will acknowledge your report and provide an initial response **within 14 days** of receiving it. We will keep you informed of the progress towards a fix and may ask for additional information or guidance. Once a fix is available, we will coordinate the disclosure timeline with you.
+We follow coordinated disclosure:
+
+1. **Acknowledge** — we provide an initial response **within 14 days** of receiving your report.
+2. **Triage** — we confirm the issue, assess severity (CVSS), and identify the affected versions.
+3. **Fix** — we develop and test a fix, using a private branch when necessary to avoid premature disclosure.
+4. **Release & disclose** — we release the fix, record it in [CHANGELOG.md](./CHANGELOG.md), and coordinate public disclosure (and CVE assignment, where applicable) with you. We aim to fix and disclose medium-or-higher severity issues within 90 days of triage.
+
+We will keep you informed of progress throughout and may ask for additional information or guidance.
+
+## Credit
+
+Unless you request otherwise (including a request to remain anonymous), we credit reporters of valid vulnerabilities in the release notes or advisory that accompanies the fix.
 
 ## Cryptography
 
@@ -31,3 +42,7 @@ InstantX first-party code does **not** implement its own cryptographic algorithm
 ## Supported Versions
 
 Security fixes are applied to the latest released version. Please ensure you are running the most recent release before reporting an issue. Publicly known, fixed run-time vulnerabilities (if any) are recorded in [CHANGELOG.md](./CHANGELOG.md).
+
+## Security Architecture & Threat Model
+
+For the project's security requirements, secure-design principles, hardening guidance, and threat model, see [docs/Security-Architecture.md](./docs/Security-Architecture.md) and [docs/Threat-Model.md](./docs/Threat-Model.md).
