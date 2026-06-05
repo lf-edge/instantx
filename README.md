@@ -1,5 +1,7 @@
 ![Alt text](./images/logo.png)
 
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/12224/badge)](https://www.bestpractices.dev/projects/12224)
+
 ### Table of Contents
 
 - [Introduction](#introduction)
@@ -66,6 +68,7 @@ InstantX offers significant benefits:
 ## Additional information
 
 - [Deployment QuickStart](./deployment/Quick-Start.md)
+- [Development guide](./docs/Development.md) — build, test, lint, and static analysis
 
 - User guides
   - [MQTT Topic Structure](./docs/MQTT-Topic-Structure.md)
@@ -78,16 +81,18 @@ Please refer to [Release notes](./RELEASE.md) document for detailed information
 
 ## Contributing
 
-- Please take a look at our [Contribution guidelines](./docs/CONTRIBUTION.md) to learn how to contribute to the [InstantX] project.
+- Please read our [Contributing guidelines](./CONTRIBUTING.md) to learn how to contribute to the [InstantX] project.
+- Review our [Code of Conduct](./CODE_OF_CONDUCT.md) and the list of [Maintainers](./MAINTAINERS.md).
+- To report a security vulnerability, follow our [Security Policy](./SECURITY.md).
 
 ## Support
 
-- Internal
-  - [Project Wiki](https://github.com/lf-edge/instantx/wiki)
-  - [Project Issues](https://github.com/lf-edge/instantx/issues)
-- External
-  - [Stackoverflow](http://stackoverflow.com/questions/tagged/InstantX)
-  - [Q&A forum](https://groups.google.com/forum/#!forum/InstantX) - NOT CREATED YET
+See [SUPPORT.md](./SUPPORT.md) for all support channels. In short:
+
+- [GitHub Discussions](https://github.com/lf-edge/instantx/discussions) — questions, ideas, and general discussion.
+- [GitHub Issues](https://github.com/lf-edge/instantx/issues) — bug reports and feature requests.
+- [Project Wiki](https://github.com/lf-edge/instantx/wiki) — community-maintained notes.
+- [Stack Overflow](https://stackoverflow.com/questions/tagged/InstantX) — public Q&A (tag `InstantX`).
 
 ## References
 

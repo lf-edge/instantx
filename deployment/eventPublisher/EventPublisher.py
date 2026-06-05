@@ -6,9 +6,9 @@
 # Licensed under the MIT License;
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #      https://opensource.org/license/mit
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,23 +16,23 @@
 # limitations under the License.
 # =========================LICENSE_END==================================
 
-from flask import Flask, jsonify, request
-from binascii import hexlify
-from prometheus_client import start_http_server, Summary, Counter
-from confluent_kafka import Producer
-from waitress import serve
-import asn1tools
-import os
-import config as config
-import time
-import random
 import logging
+import os
+import random
+import time
+from binascii import hexlify
+
+import asn1tools
+import config as config
+from confluent_kafka import Producer
+from flask import Flask, jsonify, request
+from prometheus_client import Counter, start_http_server
+from waitress import serve
 
 app = Flask(__name__)
 
 # Set up logging
-#logging.basicConfig(filename='app.log', level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
-logging.basicConfig(level=logging.INFO, 
+logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s',
                     handlers=[
                         logging.FileHandler('app.log'),
@@ -46,7 +46,13 @@ producer = Producer({
 
 DATA_FOLDER = os.path.join(os.path.dirname(__file__), 'asn')
 asn1_files = [os.path.join(DATA_FOLDER, f) for f in os.listdir(DATA_FOLDER) if f.endswith('.asn')]
-encoder = asn1tools.compile_files(asn1_files, codec='uper', any_defined_by_choices=None, encoding='utf-8', numeric_enums=False)
+encoder = asn1tools.compile_files(
+    asn1_files,
+    codec='uper',
+    any_defined_by_choices=None,
+    encoding='utf-8',
+    numeric_enums=False,
+)
 
 REQUEST_COUNT = Counter(config.MESSAGES_COUNT_METRICS, 'Number of messages processed', ['sub_service'])
 
@@ -80,7 +86,7 @@ def publish_message(sub_service, sub_service_group, geohash):
     app.logger.debug('Encoded: %s', message)
     app.logger.debug('Decoded: %s', encoder.decode(sub_service, encoded, check_constraints=False))
 
-    time.sleep(random.uniform(0.5, 1.5))
+    time.sleep(random.uniform(0.5, 1.5))  # nosec B311 - non-crypto timing jitter
     REQUEST_COUNT.labels(sub_service=sub_service).inc()
     # Create a response
     response = {
@@ -105,9 +111,9 @@ if __name__ == '__main__':
 
     # Start the Prometheus metrics server
     start_http_server(config.PROMETHEUS_SERVER)
-    
+
     # -----------------------------------
     # Start the Flask server (development)
     #app.run(host='0.0.0.0', port=config.port)
     # Start the Waitress server (production)
-    serve(app, host="0.0.0.0", port=config.port)
+    serve(app, host="0.0.0.0", port=config.port)  # nosec B104 - containerized service, published port

@@ -15,7 +15,25 @@ packages = [{include = "src"}]
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.5"
 pytest-cov = "^6.1.1"
+ruff = "^0.6.0"
+bandit = "^1.7.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+# Linting (ruff) and static analysis (bandit) for the NiFi scripts.
+# See ../../../docs/Development.md for how to run these across all first-party Python.
+[tool.ruff]
+target-version = "py39"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+# The test fixture embeds a single-line ETSI DENM XML payload that must stay intact.
+"**/tests/**" = ["E501"]
+
+[tool.bandit]
+exclude_dirs = ["tests"]

@@ -7,7 +7,7 @@
 - **Design Approach:** Prioritize cloud-native architectural decisions, distributed resilience, low-latency edge processing, and adherence to ETSI/5GAA industry standards.
 
 ## 2. Project Overview
-**InstantX** (Instant eXchange) is an LF Edge / Vodafone Business edge-cloud platform for real-time, location-addressed data exchange, focusing on **V2X** (Vehicle-to-Everything) C-ITS messaging. 
+**InstantX** (InstantX) is an LF Edge / Vodafone Business edge-cloud platform for real-time, location-addressed data exchange, focusing on **V2X** (Vehicle-to-Everything) C-ITS messaging. 
 
 It is a deployment-and-integration repository: a `docker-compose` stack of off-the-shelf brokers and observability tools, glued together by first-party code (Python services + scripts + a NiFi flow). 
 - **Core Mechanism:** Messages are addressed by **geohash** so subscribers receive only data for their location and radius. 
@@ -52,7 +52,7 @@ Managed via Poetry in `deployment/nifi/nifi-scripts`:
 ## 6. Repository Gotchas (Agent Watchlist)
 When modifying code or configurations, enforce the following constraints:
 - **Duplicated ASN.1 Schemas:** Schemas exist in both `deployment/eventPublisher/asn/` and `deployment/nifi/asn/`. If you modify a schema, **update both locations**.
-- **Test Environment Paths:** `test_main_function_with_valid_input` in the NiFi tests currently hardcodes an absolute `DATA_FOLDER` from a legacy machine. Account for this if tests fail locally.
+- **Test Environment Paths:** `test_main_function_with_valid_input` in the NiFi tests resolves `DATA_FOLDER` relative to the test file (`../../asn`). Keep it relative — do not reintroduce machine-specific absolute paths.
 - **NiFi Flow Bootstrapping:** The flow is bootstrapped by `nifi-setup` via `nifi-init.sh`, pulling `flow.json` from the Registry. UI edits do not update the committed `flow.json`.
 - **Vendored Binaries:** Custom NARs and connector JARs are committed as binaries. Their source code lives in sibling repositories (`instantx-connectors`, `instantx-metrics`).
 - **AMQP & Networks:** External AMQP (e.g., RabbitMQ) is wired via NiFi Parameter Context. Connect external brokers to the `deployment_nifi_network` Docker network.
@@ -61,4 +61,4 @@ When modifying code or configurations, enforce the following constraints:
 ## 7. Contribution Conventions
 - **Workflow:** Fork → feature branch → PR against `main`.
 - **Versioning:** Semantic Versioning (SemVer). Record user-facing changes in `CHANGELOG.md` (Keep a Changelog format) and `RELEASE.md`.
-- **Standards:** Maintain clean commit histories, strict license headers (First-party code is MIT), and adhere to `docs/CONTRIBUTION.md`.
+- **Standards:** Maintain clean commit histories, strict license headers (First-party code is MIT), and adhere to `CONTRIBUTING.md`.

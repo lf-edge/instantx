@@ -1,6 +1,7 @@
+import json
+
 from kafka import KafkaConsumer
 from prometheus_client import Gauge, start_http_server
-import json
 
 # Metric with stationID
 speed_metric = Gauge('station_speed_kph', 'Velocidad reportada por estación', ['stationID'])
