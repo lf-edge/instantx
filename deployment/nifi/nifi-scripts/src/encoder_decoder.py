@@ -165,31 +165,31 @@ def replace_specific_values(
             replace_specific_values(item, predefined_keys, special_keys)
 
 
-def main():
-    # Read JSON input from stdin
-    input_data = sys.stdin.read()
-    message_type = sys.argv[1]
-
-    # -------------------------------------------------
-    # For Xml
+def transform_xml(input_data, message_type):
+    """Parse the XML payload and normalize it into the dict the encoder expects."""
     data_dict = xmltodict.parse(input_data, force_list=["traces", "eventHistory"])
-    # fix to remove top level element
+    # Remove the top-level element.
     data_dict = data_dict[message_type]
     convert_dictionary(data_dict)
-    # Can't handle recursion yet, which requires two passages
+    # Can't handle recursion yet, which requires two passes.
     replace_specific_values(data_dict, [], ["EventPoint"])
     replace_specific_values(data_dict, ["PathHistory"], [])
     replace_specific_values(data_dict, ["PathPoint"], [])
+    return data_dict
 
-    # fix to set boolean values straigh
-    # -------------------------------------------------
-    DATA_FOLDER = os.path.join(os.path.dirname(__file__), "asn")
+
+def build_encoder(data_folder=None):
+    """Compile the ASN.1 schemas used for UPER encoding.
+
+    Defaults to an `asn` folder next to this module (as used inside NiFi); tests
+    pass the repository's `deployment/nifi/asn` folder explicitly.
+    """
+    if data_folder is None:
+        data_folder = os.path.join(os.path.dirname(__file__), "asn")
     asn1_files = [
-        os.path.join(DATA_FOLDER, f)
-        for f in os.listdir(DATA_FOLDER)
-        if f.endswith(".asn")
+        os.path.join(data_folder, f) for f in os.listdir(data_folder) if f.endswith(".asn")
     ]
-    encoder = asn1tools.compile_files(
+    return asn1tools.compile_files(
         asn1_files,
         codec="uper",
         any_defined_by_choices=None,
@@ -197,36 +197,38 @@ def main():
         numeric_enums=False,
     )
 
-    # Uncomment only for debugging purposes. It won't work inside Nifi processing
-    # print(data_dict)
 
-    # Extract the 3 main elements from DenmEtsi (GeoNetwork and BTPB headers and inner DENM)
+def encode_denm_etsi(data_dict, encoder):
+    """Encode a DenmEtsi message as three UPER parts and concatenate them.
+
+    The GeoNetworking header's payloadLength is set to the combined size of the
+    BTP-B and inner DENM parts before encoding, matching the on-wire format.
+    """
     data_dict_btpb = data_dict["btpb"]
     data_dict_denm = data_dict["denm"]
     data_dict_gn = data_dict["gbcGacHeader"]
 
-    # Encode BTPB and DENM, to calculate the generated size
+    # Encode BTP-B and DENM first to compute the payload size.
     encoded_btpb = encoder.encode("BTPB", data_dict_btpb)
     encoded_denm = encoder.encode("DENM", data_dict_denm)
     calculated_size = len(encoded_btpb) + len(encoded_denm)
-    # Uncomment only for debugging purposes. It won't work inside Nifi processing
-    # print("Size: " + str(calculated_size))
-    # Upload GeoNetwork Payload length with appropriate size
     data_dict_gn["commonHeader"]["payloadLength"] = calculated_size
 
     encoded_gn = encoder.encode("GbcGacHeader", data_dict_gn)
-
-    # To used anymore to encode full message. Encoding done individually
-    # encoded = encoder.encode(service_type, data_dict)
-    # Generate full encoded message by concatenating the individual components
-    encoded = encoded_gn + encoded_btpb + encoded_denm
-    # Uncomment only for debugging purposes. It won't work inside Nifi processing
-    # print(encoded)
-    message = hexlify(encoded).decode("ascii")
-    print(message)
+    # Concatenate GeoNetworking header + BTP-B header + inner DENM.
+    return encoded_gn + encoded_btpb + encoded_denm
 
 
-if __name__ == "__main__":
+def main():  # pragma: no cover - stdin/stdout/argv wiring for NiFi ExecuteStreamCommand
+    input_data = sys.stdin.read()
+    message_type = sys.argv[1]
+    data_dict = transform_xml(input_data, message_type)
+    encoder = build_encoder()
+    encoded = encode_denm_etsi(data_dict, encoder)
+    print(hexlify(encoded).decode("ascii"))
+
+
+if __name__ == "__main__":  # pragma: no cover
     # NiFi (ExecuteStreamCommand) runs this module as a script and feeds the
     # XML payload on stdin. Guarding the call keeps the module importable for
     # tests without executing main() (which would block on stdin).

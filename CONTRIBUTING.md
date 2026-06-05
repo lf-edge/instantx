@@ -98,6 +98,16 @@ We appreciate your contribution to this project! If you have any questions, feel
 > #### Legal Notice
 > When contributing to this project, you must agree that you have authored 100% of the content, that you have the necessary rights to the content, and that the content you contribute may be provided under the project [license](./LICENSE.md).
 
+#### Developer Certificate of Origin (DCO)
+
+All contributions must be signed off under the [Developer Certificate of Origin](https://developercertificate.org/). Add a `Signed-off-by` line to every commit by committing with `-s`:
+
+```sh
+git commit -s -m "Your message"
+```
+
+This certifies that you wrote the change (or otherwise have the right to submit it) under the project license. A CI check enforces the sign-off on every pull request — commits without a `Signed-off-by` line will fail.
+
 > #### Verification
 > We may request additional information or verification if there are any concerns regarding the origin or licensing of your code.
 
@@ -106,7 +116,7 @@ We appreciate your contribution to this project! If you have any questions, feel
 1. **Fork the repository** — Create a fork of this repository on your GitHub account.
 2. **Create a branch** — Create a branch for your code changes.
 3. **Implement your changes** — Make your changes to the codebase, including tests (see [Testing Policy](#testing-policy)).
-4. **Commit your changes** — Commit with a clear and descriptive commit message.
+4. **Commit your changes** — Commit with a clear, descriptive message and sign off with `git commit -s` (see [Developer Certificate of Origin](#developer-certificate-of-origin-dco)).
 5. **Push your changes** — Push your changes to your forked branch.
 6. **Open a pull request** — Open a pull request from your forked branch to the `main` branch of this repository, filling in the pull request template.
 7. **Wait for feedback** — Wait for the team to review your PR and act upon it.
@@ -126,7 +136,8 @@ The first-party Python test suite lives in [`deployment/nifi/nifi-scripts`](./de
 To keep contributions consistent and clean:
 
 - Write clean, well-documented code, and include a license header on new first-party source files (first-party code is MIT).
-- Lint Python code with [`ruff`](https://docs.astral.sh/ruff/) and scan it with [`bandit`](https://bandit.readthedocs.io/) before opening a PR — see the [Development guide](./docs/Development.md).
+- Follow [PEP 8](https://peps.python.org/pep-0008/) for Python; it is enforced automatically by [`ruff`](https://docs.astral.sh/ruff/) (configuration in `deployment/nifi/nifi-scripts/pyproject.toml`).
+- Lint with `ruff` and scan with [`bandit`](https://bandit.readthedocs.io/) before opening a PR — see the [Development guide](./docs/Development.md). CI runs both on every PR.
 - Follow the existing style and structure of the surrounding code.
 
 ### Improving the Documentation

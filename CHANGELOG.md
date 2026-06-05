@@ -14,11 +14,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `.github/` pull request and issue templates.
 - `ruff` (linting) and `bandit` (static analysis) configuration for first-party Python code.
 - OpenSSF Best Practices badge in the README.
+- Continuous integration (`.github/workflows/ci.yml`): pytest with a ≥80% coverage gate, `ruff`, `bandit`, and a DCO sign-off check on every pull request.
+- Unit tests for the Event Publisher API and the Kafka speed exporter (first-party coverage ≥80%).
+- Allowlist input validation and a request-size limit on the Event Publisher API.
+- `GOVERNANCE.md`, `ROADMAP.md`, `docs/Threat-Model.md`, and `docs/Security-Architecture.md`.
+- Developer Certificate of Origin (DCO) sign-off requirement (documented in `CONTRIBUTING.md`, enforced in CI).
 
 ### Changed
 
 - Moved governance documentation from `docs/` to the repository root and fixed internal links.
 - Rewrote `SUPPORT.md` (previously a duplicate of the contribution guide) with real support channels.
+- Refactored `EventPublisher.py` into an application factory and `encoder_decoder.py`/`kafka_speed_exporter.py` into testable functions (runtime behavior preserved).
+- Documented signed-release verification (Sigstore `gitsign`) and the upgrade path in `RELEASE.md`.
 
 ### Fixed
 
