@@ -11,8 +11,7 @@ _Last reviewed: 2026-06._
 ## Now (0–3 months)
 
 - **Project quality & supply chain:** reach OpenSSF Best Practices **Silver**
-  (CI, ≥80% test coverage, signed releases, threat model). Tracked in
-  [docs/planes/openssf-fase2-silver.md](./docs/planes/openssf-fase2-silver.md).
+  (CI, ≥80% test coverage, signed releases, threat model).
 - **Continuous integration:** automated tests, linting (ruff) and SAST (bandit)
   on every pull request.
 - **Hardening:** input validation on the Event Publisher API, pinned container
