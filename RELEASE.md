@@ -4,16 +4,20 @@ InstantX uses [Semantic Versioning](https://semver.org/). The notes below summar
 
 ## Release process & signature verification
 
-Releases are identified by **signed Git tags**, signed with [Sigstore `gitsign`](https://github.com/sigstore/gitsign) (keyless signing via OIDC — no long-lived keys to manage). To verify a release tag, install `gitsign` and verify the tag, e.g.:
+A release is cut by pushing a `v*` tag (e.g. `git tag v2.1.0 && git push origin v2.1.0`). The [release workflow](./.github/workflows/release.yml) then builds a source archive and **signs it with [cosign](https://github.com/sigstore/cosign)** — keyless, via GitHub OIDC (no long-lived keys), with the signature recorded in the Sigstore [Rekor](https://docs.sigstore.dev/logging/overview/) transparency log. It attaches the archive, its SHA-256 checksum, the signature (`.sig`), and the signing certificate (`.pem`) to the GitHub Release.
+
+To verify a downloaded release archive:
 
 ```sh
-gitsign verify-tag \
-  --certificate-oidc-issuer="https://token.actions.githubusercontent.com" \
-  --certificate-identity-regexp="lf-edge/instantx" \
-  <tag>
+cosign verify-blob \
+  --certificate "instantx-<version>.tar.gz.pem" \
+  --signature "instantx-<version>.tar.gz.sig" \
+  --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+  --certificate-identity-regexp "https://github.com/lf-edge/instantx/.github/workflows/release.yml@.*" \
+  "instantx-<version>.tar.gz"
 ```
 
-Adjust the `--certificate-identity`/`--certificate-oidc-issuer` to match the maintainer or CI workflow that produced the signature (see the gitsign documentation). The release-manager role is described in [GOVERNANCE.md](./GOVERNANCE.md).
+The release-manager role is described in [GOVERNANCE.md](./GOVERNANCE.md).
 
 ## Upgrade path
 
