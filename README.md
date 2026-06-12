@@ -2,6 +2,7 @@
 
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/12224/badge)](https://www.bestpractices.dev/projects/12224)
 [![CI](https://github.com/lf-edge/instantx/actions/workflows/ci.yml/badge.svg)](https://github.com/lf-edge/instantx/actions/workflows/ci.yml)
+[![Website](https://github.com/lf-edge/instantx/actions/workflows/website.yml/badge.svg)](https://lf-edge.github.io/instantx/)
 [![Release](https://img.shields.io/github/v/release/lf-edge/instantx?sort=semver)](https://github.com/lf-edge/instantx/releases)
 [![Signed with cosign](https://img.shields.io/badge/release-signed%20(cosign)-5b3bb3?logo=sigstore&logoColor=white)](https://github.com/lf-edge/instantx/blob/main/RELEASE.md#release-process--signature-verification)
 [![License: MIT + Apache-2.0](https://img.shields.io/badge/license-MIT%20%2B%20Apache--2.0-blue)](https://github.com/lf-edge/instantx/blob/main/LICENSE.md)
@@ -26,6 +27,8 @@
 - [Licenses](#licenses)
 
 ## Introduction
+
+Project website: <https://lf-edge.github.io/instantx/>
 
 [InstantX], developed by Vodafone Business within the [STEP] (Safer Transport for Europe Platform) and in collaboration with the [LF Edge], is an edge cloud project designed for real-time data exchange, crucial across various industries including transportation, healthcare, finance, and manufacturing. A key focus of InstantX is [V2X] (Vehicle-to-Everything) communication, which enhances safety and efficiency by facilitating data exchange between road users and infrastructure.
 

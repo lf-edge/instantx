@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `GOVERNANCE.md`, `ROADMAP.md`, `docs/Threat-Model.md`, and `docs/Security-Architecture.md`.
 - Developer Certificate of Origin (DCO) sign-off requirement (documented in `CONTRIBUTING.md`, enforced in CI).
 - Release-signing workflow (`.github/workflows/release.yml`): on every `v*` tag, builds a source archive and signs it with cosign (keyless, Sigstore) before publishing a GitHub Release.
+- Project landing page (`website/`, React + Vite) deployed to GitHub Pages via `.github/workflows/website.yml` (<https://lf-edge.github.io/instantx/>).
 
 ### Changed
 

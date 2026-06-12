@@ -1,0 +1,75 @@
+/* ========================LICENSE_START=================================
+ * InstantX Website
+ * %%
+ * Copyright (C) 2024 - 2026 Vodafone
+ * %%
+ * Licensed under the MIT License;
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://opensource.org/license/mit
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * =========================LICENSE_END==================================
+ */
+
+/* ============================================================
+   InstantX — rebuilt landing page
+   Direction: developer-tool / OSS (dark canvas, single accent,
+   monospace code). Token-driven so light/dark is one override.
+   ============================================================ */
+
+/* ---- Design tokens (dark default) ---- */
+:root[data-theme="dark"]{
+  --bg:        oklch(15% 0.018 305);
+  --bg-2:      oklch(18% 0.02 305);
+  --surface:   oklch(21% 0.022 305);
+  --surface-2: oklch(25.5% 0.024 305);
+  --fg:        oklch(97% 0.006 305);
+  --muted:     oklch(74% 0.02 305);
+  --faint:     oklch(62% 0.02 305);
+  --border:    oklch(31% 0.02 305);
+  --border-2:  oklch(42% 0.022 305);
+  --accent:    oklch(72% 0.13 300);
+  --accent-2:  oklch(78% 0.11 300);
+  --accent-ink: oklch(16% 0.05 300);
+  --accent-soft: oklch(72% 0.13 300 / 0.14);
+  --cyan:      oklch(82% 0.10 192);
+  --ok:        oklch(80% 0.15 158);
+  --warn:      oklch(84% 0.13 85);
+  --code-bg:   oklch(12% 0.016 305);
+  --shadow:    0 18px 50px oklch(0% 0 0 / 0.5);
+}
+:root[data-theme="light"]{
+  --bg:        oklch(99% 0.003 305);
+  --bg-2:      oklch(97% 0.005 305);
+  --surface:   oklch(100% 0 0);
+  --surface-2: oklch(98% 0.006 305);
+  --fg:        oklch(22% 0.02 305);
+  --muted:     oklch(46% 0.02 305);
+  --faint:     oklch(54% 0.02 305);
+  --border:    oklch(90% 0.008 305);
+  --border-2:  oklch(83% 0.012 305);
+  --accent:    oklch(46% 0.16 300);
+  --accent-2:  oklch(40% 0.17 300);
+  --accent-ink: oklch(99% 0.005 300);
+  --accent-soft: oklch(46% 0.16 300 / 0.10);
+  --cyan:      oklch(46% 0.09 200);
+  --ok:        oklch(52% 0.15 158);
+  --warn:      oklch(52% 0.13 70);
+  --code-bg:   oklch(20% 0.018 305);
+  --shadow:    0 18px 50px oklch(40% 0.02 305 / 0.16);
+}
+
+:root{
+  --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --maxw: 1180px;
+  --pad: clamp(20px, 5vw, 48px);
+  --r: 14px;
+  --r-sm: 10px;
+}
