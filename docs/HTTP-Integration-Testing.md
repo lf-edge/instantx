@@ -177,6 +177,7 @@ curl -i -X POST http://localhost:5000/api/publish/denm/public/ailo \
 | `400 {"error":"payload does not conform to the message schema"}` | The JSON body is not a valid DENM. Use the exact body from [section 5](#5-send-a-message-http-post). |
 | POST returns `200` but nothing appears on MQTT | The MQTT Sink connector is not `RUNNING`, or you subscribed to the wrong topic. Check `curl http://localhost:8083/connectors/MQTTSinkConnector/status` and subscribe to `v2x/denm/public/g8/#`. |
 | Connector status is empty / `404` | Kafka Connect has not registered the connector yet (~100 s after start) or it failed — see `docker-compose logs connect`. |
+| Connector is `RUNNING` but the first end-to-end test still fails | On a cold first start Kafka Connect can take a while to fully stabilize. After confirming `MQTTSinkConnector` is `RUNNING`, restart the container (`docker-compose restart connect`) and wait a few minutes before testing again. |
 | MQTT payload looks like gibberish | It is the UPER-encoded DENM as a hex string — expected. It is not meant to be human-readable JSON; see [UPER Encoding](./Encoding.md). |
 
 ## Related
