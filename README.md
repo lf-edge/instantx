@@ -78,6 +78,7 @@ See **[ROADMAP.md](./ROADMAP.md)** for the project's direction (now / next / lat
 
 - [Deployment QuickStart](./deployment/Quick-Start.md)
 - [Development guide](./docs/Development.md) — build, test, lint, and static analysis
+- [Manual MQTT Testing](./docs/MQTT-Manual-Testing.md) — connect to the broker and validate the publish/subscribe flow with `mosquitto` clients
 
 - User guides
   - [MQTT Topic Structure](./docs/MQTT-Topic-Structure.md)
