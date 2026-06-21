@@ -1,16 +1,10 @@
 # Use an appropriate base image
-FROM python:3.9-alpine
+# Debian slim: pip installs the prebuilt confluent_kafka wheel, which bundles a
+# matching librdkafka. No system librdkafka or C toolchain required.
+FROM python:3.9-slim-bookworm
 
-# Install librdkafka and other dependencies
-RUN apk add --no-cache \
-    librdkafka-dev \
-    gcc \
-    musl-dev \
-    libc-dev \
-    linux-headers
-
-# Create a non-root user and group with specific ID for consistency
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+# Create a non-root user and group for consistency
+RUN groupadd -r appgroup && useradd -r -g appgroup appuser
 
 # Set the working directory
 WORKDIR /app

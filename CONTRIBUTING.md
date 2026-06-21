@@ -131,6 +131,8 @@ Quality is a shared responsibility. To keep the project maintainable:
 
 The first-party Python test suite lives in [`deployment/nifi/nifi-scripts`](./deployment/nifi/nifi-scripts) and is run with `pytest`. See the [Development guide](./docs/Development.md) for how to run tests, linting, and static analysis locally.
 
+For manual, end-to-end checks against the running stack, see the [Manual MQTT Testing](./docs/MQTT-Manual-Testing.md) guide (connect to the broker and watch a message travel from a publisher to a subscriber) and the [HTTP Integration Testing](./docs/HTTP-Integration-Testing.md) guide (POST a message to the Event Publisher API and read it back from MQTT).
+
 ### Coding Standards
 
 To keep contributions consistent and clean:

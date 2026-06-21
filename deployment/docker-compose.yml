@@ -104,7 +104,7 @@ services:
       CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
       CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
       CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.storage.StringConverter
-      CONNECT_REST_ADVERTISED_HOST_NAME: kafka
+      CONNECT_REST_ADVERTISED_HOST_NAME: connect
       CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
       CONNECT_LOG4J_LOGGERS: "org.apache.kafka.connect.runtime.rest=WARN,org.reflections=ERROR"
       CONNECT_LOG4J_APPENDER_STDOUT_LAYOUT_CONVERSIONPATTERN: "[%d] %p %X{connector.context}%m (%c:%L)%n"
@@ -238,7 +238,6 @@ services:
       context: .
       dockerfile: ./nifi/Dockerfile.nifi-init
     container_name: instantx_setup
-    platform: linux/amd64
     depends_on:
       nifi:
         condition: service_healthy

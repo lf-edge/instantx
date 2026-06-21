@@ -1,9 +1,7 @@
-FROM ubuntu:latest
+FROM alpine:3.20
 
-# switch mirrors to HTTPS, then update/install
-RUN sed -i 's|http://|https://|g' /etc/apt/sources.list /etc/apt/sources.list.d/*.list 2>/dev/null || true \
- && apt-get -o Acquire::Retries=5 update \
- && apt-get install -y curl jq
+# bash (script shebang), curl + jq (NiFi REST calls); --no-cache keeps layer lean
+RUN apk add --no-cache bash curl jq
 
 COPY ./nifi/nifi-init.sh /opt/scripts/nifi-init.sh
 RUN chmod +x /opt/scripts/nifi-init.sh
