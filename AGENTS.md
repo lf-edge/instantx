@@ -1,5 +1,7 @@
 # InstantX (LF Edge) - Agent Instructions
 
+> **Setup:** This file is the single, version-controlled source of agent instructions. Claude Code reads `CLAUDE.md`, which is git-ignored on purpose — symlink it to this file after cloning. See [section 8](#8-agent-instruction-files-claudemd--agentsmd).
+
 ## 1. Agent Persona & Operational Guidelines
 - **Assigned Role:** Technical assistant operating under the strict guidelines of a Cloud Solution Architect and Tech Lead PO.
 - **Tone and Style:** Concise, direct, and rigorously professional.
@@ -62,3 +64,26 @@ When modifying code or configurations, enforce the following constraints:
 - **Workflow:** Fork → feature branch → PR against `main`.
 - **Versioning:** Semantic Versioning (SemVer). Record user-facing changes in `CHANGELOG.md` (Keep a Changelog format) and `RELEASE.md`.
 - **Standards:** Maintain clean commit histories, strict license headers (First-party code is MIT), and adhere to `CONTRIBUTING.md`.
+
+## 8. Agent Instruction Files (CLAUDE.md ↔ AGENTS.md)
+- **Single source of truth:** `AGENTS.md` (this file) is the canonical, committed agent guide. **Do not maintain a separate `CLAUDE.md` with its own content** — it drifts.
+- **Why `CLAUDE.md` is git-ignored:** Claude Code looks for `CLAUDE.md`, but committing it would duplicate `AGENTS.md`. `.gitignore` excludes `CLAUDE.md` (and `CLAUDE.local.md`); each developer links it to `AGENTS.md` locally so Claude Code reads the same instructions every other agent uses.
+- **One-time setup (run from repo root after cloning):**
+
+  **macOS / Linux:**
+  ```bash
+  ln -s AGENTS.md CLAUDE.md
+  ```
+
+  **Windows — PowerShell** (Developer Mode on, or run as Administrator):
+  ```powershell
+  New-Item -ItemType SymbolicLink -Path CLAUDE.md -Target AGENTS.md
+  ```
+
+  **Windows — cmd.exe** (run as Administrator):
+  ```cmd
+  mklink CLAUDE.md AGENTS.md
+  ```
+
+- **Result:** Edit `AGENTS.md` only; `CLAUDE.md` follows automatically. The symlink is local-only and never committed (it matches the `.gitignore` entry).
+- **`CLAUDE.local.md`:** Reserved for per-developer overrides that must never be shared — also git-ignored. Do not put project-wide guidance there.
