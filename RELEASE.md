@@ -30,6 +30,38 @@ cd deployment && docker-compose up --build -d
 
 Breaking changes (MAJOR bumps) and any required migration steps are called out in the release notes below and in [CHANGELOG.md](./CHANGELOG.md).
 
+## Release 2.2.0
+
+Backward-compatible release (no migration steps).
+
+Added
+- Contributor testing guides: [Manual MQTT Testing](./docs/MQTT-Manual-Testing.md) (broker pub/sub with the `mosquitto` clients) and [HTTP Integration Testing](./docs/HTTP-Integration-Testing.md) (POST to the Event Publisher API and read the message back from MQTT, end-to-end).
+- README status badges and an `AGENTS.md` section documenting the `CLAUDE.md ↔ AGENTS.md` symlink setup.
+
+Fixed
+- Kafka Connect now starts healthy and exposes its REST API on port 8083 (corrected `CONNECT_REST_ADVERTISED_HOST_NAME`) — resolves #11 and #12.
+- The Event Publisher image builds behind restrictive firewalls (base image moved to `python:3.9-slim-bookworm`, dropping the system build toolchain) — resolves #30.
+
+Changed
+- Slimmer container bases for the Event Publisher and `nifi-init` images; removed the `linux/amd64` platform pin on the `nifi-setup` service.
+
+## Release 2.1.0
+
+Added
+- Community health files (`CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md`, `SUPPORT.md`, `MAINTAINERS.md`), `GOVERNANCE.md`, and `ROADMAP.md`.
+- Continuous integration (`ci.yml`): pytest with a ≥80% coverage gate, `ruff`, `bandit`, and a DCO sign-off check; first-party unit tests for the Event Publisher and Kafka speed exporter.
+- Keyless release-signing workflow (`release.yml`): every `v*` tag builds a source archive and signs it with cosign (Sigstore).
+- Security hardening: allowlist input validation and a request-size limit on the Event Publisher API; `docs/Threat-Model.md` and `docs/Security-Architecture.md`.
+
+Changed
+- `EventPublisher.py` refactored into an application factory; encoder/exporter refactored into testable functions (runtime behavior preserved).
+
+Fixed
+- NiFi script tests use a path relative to the test file instead of a hardcoded absolute `DATA_FOLDER`.
+
+Security
+- Updated Werkzeug (`safe_join` advisories) and pytest (dev) to remediate known CVEs; added Dependabot monitoring.
+
 ## Release 2.0.0
 
 Added 
