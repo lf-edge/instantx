@@ -238,7 +238,6 @@ services:
       context: .
       dockerfile: ./nifi/Dockerfile.nifi-init
     container_name: instantx_setup
-    platform: linux/amd64
     depends_on:
       nifi:
         condition: service_healthy
