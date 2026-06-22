@@ -19,3 +19,14 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+
+  # Website (npm / React + Vite) — grouped to one weekly PR to limit noise
+  - package-ecosystem: "npm"
+    directory: "/website"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      website-deps:
+        patterns:
+          - "*"

@@ -74,6 +74,12 @@ htmlcov/
 dmypy.json
 .ruff_cache/
 
+# === Node / website (website/ — React + Vite landing page) ===
+node_modules/
+website/dist/
+*.tsbuildinfo
+npm-debug.log*
+
 # === Environments & secrets ===
 .env
 .env.*
@@ -122,6 +128,8 @@ target/
 **/*.db-shm
 **/*.db-wal
 **/*.journal
+# Note: website/package-lock.json is intentionally committed (npm ci needs
+# it); it does not match this pattern, which targets runtime lock files.
 **/*.lock
 checkpoint
 snapshot
