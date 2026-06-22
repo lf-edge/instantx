@@ -54,10 +54,10 @@
   --faint:     oklch(54% 0.02 305);
   --border:    oklch(90% 0.008 305);
   --border-2:  oklch(83% 0.012 305);
-  --accent:    oklch(50% 0.14 300);
-  --accent-2:  oklch(44% 0.16 300);
-  --accent-ink: oklch(99% 0.005 300);
-  --accent-soft: oklch(50% 0.16 300 / 0.10);
+  --accent:    oklch(62.793% 0.25768 29.223);
+  --accent-2:  oklch(62.793% 0.25768 29.223);
+  --accent-ink: oklch(62.793% 0.25768 29.223);
+  --accent-soft: oklch(62.793% 0.25768 29.223 / 0.1);
   --cyan:      oklch(46% 0.09 200);
   --ok:        oklch(52% 0.15 158);
   --warn:      oklch(52% 0.13 70);
