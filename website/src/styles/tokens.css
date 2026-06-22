@@ -34,10 +34,10 @@
   --faint:     oklch(62% 0.02 305);
   --border:    oklch(31% 0.02 305);
   --border-2:  oklch(42% 0.022 305);
-  --accent:    oklch(72% 0.13 300);
-  --accent-2:  oklch(78% 0.11 300);
+  --accent:    oklch(82% 0.13 300);
+  --accent-2:  oklch(88% 0.11 300);
   --accent-ink: oklch(16% 0.05 300);
-  --accent-soft: oklch(72% 0.13 300 / 0.14);
+  --accent-soft: oklch(82% 0.13 300 / 0.14);
   --cyan:      oklch(82% 0.10 192);
   --ok:        oklch(80% 0.15 158);
   --warn:      oklch(84% 0.13 85);
@@ -54,10 +54,10 @@
   --faint:     oklch(54% 0.02 305);
   --border:    oklch(90% 0.008 305);
   --border-2:  oklch(83% 0.012 305);
-  --accent:    oklch(46% 0.16 300);
-  --accent-2:  oklch(40% 0.17 300);
+  --accent:    oklch(50% 0.14 300);
+  --accent-2:  oklch(44% 0.16 300);
   --accent-ink: oklch(99% 0.005 300);
-  --accent-soft: oklch(46% 0.16 300 / 0.10);
+  --accent-soft: oklch(50% 0.16 300 / 0.10);
   --cyan:      oklch(46% 0.09 200);
   --ok:        oklch(52% 0.15 158);
   --warn:      oklch(52% 0.13 70);
