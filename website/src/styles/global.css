@@ -126,6 +126,18 @@ code,kbd{ font-family:var(--mono); font-size:0.92em; }
   font-family:var(--mono); font-size:13.5px; color:var(--muted);
 }
 .nav-toggle{ display:none; }
+.lf-badge{
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+  padding:2px 4px; line-height:1;
+}
+.lf-badge-label{
+  font-family:var(--mono); font-size:9.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--faint);
+  white-space:nowrap;
+}
+.lf-badge-logo{ height:16px; width:auto; display:block; }
+.lf-badge-logo--light{ display:none; }                            /* dark theme is the default */
+:root[data-theme="light"] .lf-badge-logo--dark{ display:none; }
+:root[data-theme="light"] .lf-badge-logo--light{ display:block; }
 
 /* =====================================================
    Hero
@@ -348,6 +360,21 @@ a.ccard:hover h3 .arrow{ transform:translate(3px,-3px); color:var(--accent); }
   padding-block:22px; border-top:1px solid var(--border); color:var(--faint); font-size:13.5px;
 }
 .footer-bottom .socials{ display:flex; gap:8px; }
+.footer-lf{
+  display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  padding-block:22px; border-top:1px solid var(--border);
+}
+.footer-lf-logo{ display:flex; flex-shrink:0; }
+.footer-lf-logo .brand-logo{ height:30px; }
+.footer-lf p{ color:var(--muted); font-size:13.5px; margin:0; }
+.footer-lf p a{ color:var(--muted); text-decoration:underline; text-underline-offset:2px; }
+.footer-lf p a:hover{ color:var(--accent); }
+.footer-legal{
+  padding-block:18px; border-top:1px solid var(--border);
+  color:var(--faint); font-size:12.5px; text-align:center;
+}
+.footer-legal a{ color:var(--faint); text-decoration:underline; text-underline-offset:2px; }
+.footer-legal a:hover{ color:var(--accent); }
 
 /* =====================================================
    Responsive
@@ -371,6 +398,7 @@ a.ccard:hover h3 .arrow{ transform:translate(3px,-3px); color:var(--accent); }
   .nav-links.open a{ padding:12px 14px; }
   .nav-toggle{ display:grid; }
   .gh-star .gh-count{ display:none; }
+  .lf-badge{ display:none; }
 }
 @media (max-width: 600px){
   .arch-flow{ grid-template-columns:1fr; }

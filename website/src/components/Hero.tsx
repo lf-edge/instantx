@@ -27,12 +27,12 @@ function Hero() {
     <section className="hero">
       <div className="wrap hero-grid">
         <div>
-          <span className="eyebrow">Open-source edge broker</span>
+          <span className="eyebrow">Open source edge broker</span>
           <h1>
             Move real-time data <span className="grad">across every protocol</span>, at the edge.
           </h1>
           <p className="sub">
-            InstantX is an open-source edge-cloud broker for real-time data exchange. Built for V2X and
+            InstantX is an open source edge-cloud broker for real-time data exchange. Built for V2X and
             beyond, it bridges <strong>MQTT, REST, AMQP and Kafka</strong> and routes events by{' '}
             <strong>geographic location</strong> — so road users, infrastructure and backend systems
             exchange only what's relevant to their area, safely and in real time.
