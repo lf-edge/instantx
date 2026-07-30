@@ -21,7 +21,6 @@ import logoDark from '../assets/instantx-logo-dark.png'
 import logoLight from '../assets/instantx-logo.png'
 import lfEdgeLogoWhite from '../assets/lfedge-logo-white.png'
 import lfEdgeLogoColor from '../assets/lfedge-logo.png'
-import { GitHubIcon } from './icons'
 
 function Footer() {
   return (
@@ -77,14 +76,6 @@ function Footer() {
             <a href="https://lfedge.org/" target="_blank" rel="noopener">LF Edge</a>. View all{' '}
             <a href="https://lfedge.org/our-projects/" target="_blank" rel="noopener">LF Edge projects</a>.
           </p>
-        </div>
-        <div className="footer-bottom">
-          <span>© 2026 InstantX contributors · A Vodafone Business / STEP project, in collaboration with LF Edge</span>
-          <span className="socials">
-            <a className="icon-btn" href="https://github.com/lf-edge/instantx" target="_blank" rel="noopener" aria-label="InstantX on GitHub">
-              <GitHubIcon />
-            </a>
-          </span>
         </div>
         <div className="footer-legal">
           <span>
