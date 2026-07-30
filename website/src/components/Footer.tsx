@@ -19,6 +19,8 @@
 
 import logoDark from '../assets/instantx-logo-dark.png'
 import logoLight from '../assets/instantx-logo.png'
+import lfEdgeLogoWhite from '../assets/lfedge-logo-white.png'
+import lfEdgeLogoColor from '../assets/lfedge-logo.png'
 import { GitHubIcon } from './icons'
 
 function Footer() {
@@ -32,7 +34,7 @@ function Footer() {
               <img className="brand-logo brand-logo--light" src={logoLight} width={780} height={192} alt="" />
             </a>
             <p>
-              An open-source edge-cloud broker for real-time data exchange — V2X and beyond. Developed by
+              An open source edge-cloud broker for real-time data exchange — V2X and beyond. Developed by
               Vodafone Business within STEP, in collaboration with LF Edge.
             </p>
           </div>
@@ -65,12 +67,32 @@ function Footer() {
             <a href="https://github.com/lf-edge/instantx/blob/main/LICENSE.md" target="_blank" rel="noopener">License · MIT + Apache-2.0</a>
           </div>
         </div>
+        <div className="footer-lf">
+          <a className="footer-lf-logo" href="https://lfedge.org/" target="_blank" rel="noopener" aria-label="LF Edge">
+            <img className="brand-logo brand-logo--dark" src={lfEdgeLogoWhite} width={780} height={192} alt="LF Edge" />
+            <img className="brand-logo brand-logo--light" src={lfEdgeLogoColor} width={780} height={192} alt="LF Edge" />
+          </a>
+          <p>
+            InstantX is a project of the{' '}
+            <a href="https://lfedge.org/" target="_blank" rel="noopener">LF Edge</a>. View all{' '}
+            <a href="https://lfedge.org/our-projects/" target="_blank" rel="noopener">LF Edge projects</a>.
+          </p>
+        </div>
         <div className="footer-bottom">
           <span>© 2026 InstantX contributors · A Vodafone Business / STEP project, in collaboration with LF Edge</span>
           <span className="socials">
             <a className="icon-btn" href="https://github.com/lf-edge/instantx" target="_blank" rel="noopener" aria-label="InstantX on GitHub">
               <GitHubIcon />
             </a>
+          </span>
+        </div>
+        <div className="footer-legal">
+          <span>
+            Copyright © InstantX, a Series of LF Projects, LLC. |{' '}
+            <a href="https://www.linuxfoundation.org/trademark-usage" target="_blank" rel="noopener">Trademarks</a> |{' '}
+            <a href="https://www.linuxfoundation.org/privacy" target="_blank" rel="noopener">Privacy</a> |{' '}
+            <a href="https://www.linuxfoundation.org/terms" target="_blank" rel="noopener">Terms</a> |{' '}
+            <a href="https://www.linuxfoundation.org/legal/policies" target="_blank" rel="noopener">Policies</a>
           </span>
         </div>
       </div>

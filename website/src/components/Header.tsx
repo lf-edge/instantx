@@ -20,6 +20,8 @@
 import { useState } from 'react'
 import logoDark from '../assets/instantx-logo-dark.png'
 import logoLight from '../assets/instantx-logo.png'
+import lfEdgeLogoWhite from '../assets/lfedge-logo-white.png'
+import lfEdgeLogoColor from '../assets/lfedge-logo.png'
 import { useGitHubStars } from '../hooks/useGitHubStars'
 import { useScrollSpy } from '../hooks/useScrollSpy'
 import { useTheme } from '../hooks/useTheme'
@@ -62,6 +64,17 @@ function Header() {
           ))}
         </div>
         <div className="nav-right">
+          <a
+            className="lf-badge"
+            href="https://lfedge.org/"
+            target="_blank"
+            rel="noopener"
+            aria-label="A project of LF Edge"
+          >
+            <span className="lf-badge-label">A project of</span>
+            <img className="lf-badge-logo lf-badge-logo--dark" src={lfEdgeLogoWhite} width={780} height={192} alt="LF Edge" />
+            <img className="lf-badge-logo lf-badge-logo--light" src={lfEdgeLogoColor} width={780} height={192} alt="LF Edge" />
+          </a>
           <button
             className="icon-btn"
             id="themeBtn"
