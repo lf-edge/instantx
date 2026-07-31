@@ -16,7 +16,7 @@ packages = [{include = "src"}]
 pytest = "^9.0.3"
 pytest-cov = "^7.1.0"
 ruff = "^0.15.18"
-bandit = "^1.8.6"
+bandit = "^1.9.4"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
