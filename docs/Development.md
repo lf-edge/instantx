@@ -30,6 +30,25 @@ cd deployment/nifi/nifi-scripts
 poetry install            # installs runtime + dev dependencies
 ```
 
+`poetry.lock` is committed, so `poetry install` is reproducible and GitHub's dependency graph
+can resolve exact versions for this directory. Requires Poetry 2.x
+(`pipx install 'poetry>=2.0,<3.0'`). After changing dependencies, run `poetry lock` and commit
+the result — CI's `poetry-lock` job runs `poetry check --lock` and fails if the two drift apart.
+
+The package supports Python `>=3.9`, matching the runtime images
+([`eventPublisher`](../deployment/eventPublisher/Dockerfile) and
+[`kafka_speed_exporter`](../deployment/kafka_speed_exporter/Dockerfile) both build on
+`python:3.9-slim`). Two dev tools have since dropped 3.9, so the dev group declares a version
+per interpreter range and you get different versions depending on your local Python:
+
+| Tool | Python 3.9 | Python 3.10+ |
+| --- | --- | --- |
+| `pytest` | 8.4.x | 9.1.x |
+| `bandit` | 1.8.x | 1.9.x |
+
+Both are minor-version differences in the tooling only — they do not affect the code under test.
+CI runs `ruff` and `bandit` on Python 3.12 via a plain `pip install`, independently of Poetry.
+
 The Event Publisher uses a pinned `requirements.txt`:
 
 ```bash

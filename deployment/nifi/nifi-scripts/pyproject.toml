@@ -13,10 +13,21 @@ packages = [{include = "src"}]
 
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^9.1.1"
+# `requires-python` above is ">=3.9" because the runtime images are Python 3.9
+# (see deployment/eventPublisher/Dockerfile and deployment/kafka_speed_exporter/Dockerfile).
+# pytest 9.x and bandit 1.9.x require >=3.10, so a single constraint cannot be resolved
+# across the whole supported range. Declare a version per interpreter range instead, so
+# `poetry install` works on 3.9 and on 3.10+ without weakening the runtime floor.
+pytest = [
+    { version = "^9.1.1", python = ">=3.10" },
+    { version = "^8.4.2", python = "<3.10" },
+]
 pytest-cov = "^7.1.0"
 ruff = "^0.16.1"
-bandit = "^1.9.4"
+bandit = [
+    { version = "^1.9.4", python = ">=3.10" },
+    { version = "^1.8.6", python = "<3.10" },
+]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
