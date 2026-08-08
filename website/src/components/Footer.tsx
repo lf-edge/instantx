@@ -61,6 +61,8 @@ function Footer() {
           <div className="fcol">
             <h4>Community</h4>
             <a href="https://github.com/lf-edge/instantx/discussions" target="_blank" rel="noopener">Discussions</a>
+            <a href="https://lfedge.slack.com/archives/C077JQ50R45" target="_blank" rel="noopener">Slack channel</a>
+            <a href="https://lists.lfedge.org/g/instantx-TSC" target="_blank" rel="noopener">Mailing list · instantx-TSC</a>
             <a href="https://github.com/lf-edge/instantx/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">Contributing</a>
             <a href="https://github.com/lf-edge/instantx/blob/main/CODE_OF_CONDUCT.md" target="_blank" rel="noopener">Code of conduct</a>
             <a href="https://github.com/lf-edge/instantx/blob/main/LICENSE.md" target="_blank" rel="noopener">License · MIT + Apache-2.0</a>
