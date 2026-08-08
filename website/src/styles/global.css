@@ -335,6 +335,30 @@ a.ccard:hover h3 .arrow{ transform:translate(3px,-3px); color:var(--accent); }
 .ccard p{ color:var(--muted); font-size:14.5px; }
 .ccard .pill{ align-self:flex-start; font-family:var(--mono); font-size:11px; letter-spacing:0.06em; color:var(--ok); border:1px solid color-mix(in oklch,var(--ok) 35%,transparent); background:color-mix(in oklch,var(--ok) 12%,transparent); border-radius:999px; padding:3px 10px; text-transform:uppercase; }
 
+/* ---- LF Edge Slack panel ---- */
+.slack-panel{
+  margin-top:20px; display:grid; grid-template-columns:auto 1fr auto;
+  gap:clamp(16px,3vw,28px); align-items:center;
+  background:linear-gradient(180deg, var(--accent-soft), transparent), var(--surface);
+  border:1px solid color-mix(in oklch, var(--accent) 30%, var(--border));
+  border-radius:var(--r); padding:22px clamp(18px,3vw,30px);
+}
+.slack-panel .sp-icon{
+  width:52px; height:52px; border-radius:12px; display:grid; place-items:center;
+  background:var(--accent-soft); color:var(--accent);
+  border:1px solid color-mix(in oklch, var(--accent) 30%, transparent);
+}
+.slack-panel .sp-icon svg{ width:26px; height:26px; }
+.slack-panel h3{ font-size:18px; font-weight:640; }
+.slack-panel p{ color:var(--muted); font-size:14.5px; margin-top:6px; max-width:62ch; }
+.sp-meta{ display:flex; flex-wrap:wrap; gap:8px 22px; margin:12px 0 0; }
+.sp-meta div{ display:flex; align-items:baseline; gap:8px; }
+.sp-meta dt{ font-family:var(--mono); font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--faint); }
+.sp-meta dd{ margin:0; font-family:var(--mono); font-size:13px; color:var(--fg); }
+.sp-meta dd a{ color:var(--accent); border-bottom:1px solid color-mix(in oklch, var(--accent) 40%, transparent); }
+.sp-meta dd a:hover{ border-bottom-color:var(--accent); }
+.slack-panel .sp-actions{ display:flex; flex-direction:column; gap:9px; }
+
 .flow{
   margin-top:20px; background:var(--surface); border:1px solid var(--border); border-radius:var(--r);
   padding:22px clamp(18px,3vw,30px); display:flex; align-items:center; flex-wrap:wrap; gap:10px;
@@ -387,6 +411,8 @@ a.ccard:hover h3 .arrow{ transform:translate(3px,-3px); color:var(--accent); }
   .feat, .feat.lead-card{ grid-column:span 2; }
   .qs-grid{ grid-template-columns:1fr; }
   .contrib-grid{ grid-template-columns:repeat(2,1fr); }
+  .slack-panel{ grid-template-columns:auto 1fr; }
+  .slack-panel .sp-actions{ grid-column:1 / -1; flex-direction:row; flex-wrap:wrap; }
   .footer-top{ grid-template-columns:1fr 1fr; gap:28px; }
 }
 @media (max-width: 720px){
@@ -405,6 +431,8 @@ a.ccard:hover h3 .arrow{ transform:translate(3px,-3px); color:var(--accent); }
   .feat-grid{ grid-template-columns:1fr; }
   .feat, .feat.lead-card{ grid-column:span 1; }
   .contrib-grid{ grid-template-columns:1fr; }
+  .slack-panel{ grid-template-columns:1fr; }
+  .slack-panel .sp-actions .btn{ width:100%; }
   .footer-top{ grid-template-columns:1fr 1fr; }
   body{ font-size:16px; }
 }

@@ -17,6 +17,13 @@
  * =========================LICENSE_END==================================
  */
 
+import { SlackIcon } from './icons'
+
+/** LF Edge Slack — workspace invite is open to anyone; the channel link needs workspace membership. */
+const SLACK_CHANNEL_URL = 'https://lfedge.slack.com/archives/C077JQ50R45'
+const SLACK_INVITE_URL = 'https://slack.lfedge.org/'
+const MAILING_LIST_URL = 'https://lists.lfedge.org/g/instantx-TSC'
+
 const CARDS = [
   {
     href: 'https://github.com/lf-edge/instantx/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22',
@@ -77,6 +84,51 @@ function Contribute() {
               <p>{body}</p>
             </a>
           ))}
+        </div>
+
+        <div className="slack-panel">
+          <span className="sp-icon">
+            <SlackIcon />
+          </span>
+          <div>
+            <h3>InstantX on the LF Edge Slack</h3>
+            <p>
+              Day-to-day project chat lives in the InstantX channel of the LF Edge Slack workspace — design
+              questions, integration help, release coordination and community calls. Maintainers and adopters
+              read it, so it is the quickest way to reach someone.
+            </p>
+            <dl className="sp-meta">
+              <div>
+                <dt>Workspace</dt>
+                <dd>lfedge.slack.com</dd>
+              </div>
+              <div>
+                <dt>Channel</dt>
+                <dd>
+                  <a href={SLACK_CHANNEL_URL} target="_blank" rel="noopener">
+                    InstantX project channel ↗
+                  </a>
+                </dd>
+              </div>
+              <div>
+                <dt>Mailing list</dt>
+                <dd>
+                  <a href={MAILING_LIST_URL} target="_blank" rel="noopener">
+                    instantx-TSC ↗
+                  </a>
+                </dd>
+              </div>
+            </dl>
+          </div>
+          <div className="sp-actions">
+            <a className="btn btn-primary" href={SLACK_CHANNEL_URL} target="_blank" rel="noopener">
+              <SlackIcon />
+              Open the channel
+            </a>
+            <a className="btn btn-ghost" href={SLACK_INVITE_URL} target="_blank" rel="noopener">
+              Get a Slack invite
+            </a>
+          </div>
         </div>
 
         <div className="flow" aria-label="Contribution workflow">
