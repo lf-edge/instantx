@@ -131,5 +131,9 @@ target/
 # Note: website/package-lock.json is intentionally committed (npm ci needs
 # it); it does not match this pattern, which targets runtime lock files.
 **/*.lock
+# Dependency lock files are committed on purpose: Poetry needs poetry.lock for
+# reproducible installs, and GitHub's dependency graph reads it to resolve exact
+# versions (without it the nifi-scripts snapshot is reported as "Degraded").
+!**/poetry.lock
 checkpoint
 snapshot

@@ -59,6 +59,21 @@ jobs:
       - run: pip install bandit
       - run: bandit -r deployment/eventPublisher deployment/kafka_speed_exporter deployment/nifi/nifi-scripts/src -c deployment/nifi/nifi-scripts/pyproject.toml
 
+  poetry-lock:
+    name: Poetry lock is resolvable & current
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - run: pipx install 'poetry>=2.0,<3.0'
+      # An unresolvable pyproject.toml leaves GitHub's dependency graph "Degraded",
+      # which silently disables Dependabot alerts for this directory. Fail the PR instead.
+      - name: Verify poetry.lock matches pyproject.toml
+        run: poetry check --lock
+        working-directory: deployment/nifi/nifi-scripts
+
   dco:
     name: DCO sign-off
     runs-on: ubuntu-latest
