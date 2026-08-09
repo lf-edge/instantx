@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Dependabot now applies a conservative `cooldown` to version updates: 30 days for major, 14 for minor and 7 for patch releases (14 days for GitHub Actions, which supports only `default-days`). New releases soak before adoption, giving yanked releases and supply-chain issues time to surface. Security updates are unaffected and still open pull requests immediately.
+
 ## [2.2.0] - 2026-06-22
 
 ### Added

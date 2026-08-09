@@ -1,4 +1,18 @@
 version: 2
+
+# Cooldown policy (conservative)
+# ------------------------------
+# `cooldown` delays *version* updates so a release has time to soak before we
+# adopt it: yanked releases, malicious publishes and regressions typically
+# surface within days of a release.
+#
+# Cooldown does NOT apply to security updates. A Dependabot alert still opens a
+# PR immediately, so this policy slows routine bumps without delaying CVE fixes.
+#
+# `semver-*-days` is only supported by pip and npm; the github-actions
+# ecosystem supports `default-days` only.
+# See https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference#cooldown-
+
 updates:
   # Event Publisher (pip / requirements.txt)
   - package-ecosystem: "pip"
@@ -6,6 +20,11 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
+    cooldown:
+      default-days: 14
+      semver-major-days: 30
+      semver-minor-days: 14
+      semver-patch-days: 7
 
   # NiFi scripts (Poetry / pyproject.toml)
   - package-ecosystem: "pip"
@@ -13,12 +32,20 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
+    cooldown:
+      default-days: 14
+      semver-major-days: 30
+      semver-minor-days: 14
+      semver-patch-days: 7
 
   # GitHub Actions workflows (for when CI is added)
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+    # github-actions does not support the semver-*-days options.
+    cooldown:
+      default-days: 14
 
   # Website (npm / React + Vite) — grouped to one weekly PR to limit noise
   - package-ecosystem: "npm"
@@ -26,6 +53,11 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5
+    cooldown:
+      default-days: 14
+      semver-major-days: 30
+      semver-minor-days: 14
+      semver-patch-days: 7
     groups:
       website-deps:
         patterns:
