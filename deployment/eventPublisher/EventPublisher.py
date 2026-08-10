@@ -41,6 +41,25 @@ ALLOWED_SUB_SERVICES = {s.lower() for s in getattr(config, "ALLOWED_SUB_SERVICES
 # Reject oversized request bodies (default 1 MiB).
 MAX_CONTENT_LENGTH = getattr(config, "MAX_CONTENT_LENGTH", 1 * 1024 * 1024)
 
+# --- Log sanitisation ---
+# C0 controls, DEL and the C1 range. Removing these stops a caller from forging or
+# corrupting log entries with data that reaches a log sink (CWE-117).
+_LOG_CONTROL_RE = re.compile(r"[\x00-\x1f\x7f-\x9f]")
+# Bound a single logged value so a large payload cannot flood the log.
+LOG_VALUE_MAX_LENGTH = getattr(config, "LOG_VALUE_MAX_LENGTH", 256)
+
+
+def sanitize_for_log(value, max_length=None):
+    """Render an untrusted value safe to embed in a plain-text log line."""
+    max_length = LOG_VALUE_MAX_LENGTH if max_length is None else max_length
+    text = str(value)
+    if len(text) > max_length:
+        text = text[:max_length] + "...[truncated]"
+    # The regex above already strips CR and LF. The explicit replace() calls are kept
+    # because they are the sanitisation pattern CodeQL's py/log-injection query
+    # recognises as a taint barrier -- do not "simplify" them away, or the alert reopens.
+    return _LOG_CONTROL_RE.sub("", text).replace("\r", "").replace("\n", "")
+
 
 def build_encoder(data_folder=None):
     """Compile the ASN.1 schemas used to UPER-encode messages."""
@@ -116,13 +135,15 @@ def create_app(producer=None, encoder=None):
         geo_level = str(len(geohash))
         geohash_path = "/".join(list(geohash))
         key = f"v2x/{sub_service}/{sub_service_group}/g{geo_level}/{geohash_path}"
-        app.logger.info("key: %s", key)
+        app.logger.info("key: %s", sanitize_for_log(key))
 
         message_type = sub_service.upper()
         try:
             encoded = encoder.encode(message_type, data)
         except asn1tools.codecs.EncodeError as exc:
-            app.logger.warning("Encoding failed: %s", exc)
+            # The exception message embeds field names and values from the request body,
+            # which is unvalidated beyond being a JSON object -- sanitise before logging.
+            app.logger.warning("Encoding failed: %s", sanitize_for_log(exc))
             return jsonify({"error": "payload does not conform to the message schema"}), 400
 
         message = hexlify(encoded).decode("ascii")

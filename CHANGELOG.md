@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `bandit` now emits SARIF and uploads it to code scanning, so Python SAST findings are tracked as alerts (with dedup and dismissal history) instead of only failing the CI check. The check still fails the build on any finding.
 - Dependabot now applies a conservative `cooldown` to version updates: 30 days for major, 14 for minor and 7 for patch releases (14 days for GitHub Actions, which supports only `default-days`). New releases soak before adoption, giving yanked releases and supply-chain issues time to surface. Security updates are unaffected and still open pull requests immediately.
 
+### Security
+
+- Untrusted values are sanitised before being written to the Event Publisher log: control characters (including CR and LF) are stripped and long values truncated. This closes CodeQL alert `py/log-injection` (CWE-117) and, more importantly, hardens the ASN.1 encoding-error path, where field names and values from an otherwise unvalidated request body reached the log and could have been used to forge log entries.
+
 ## [2.2.0] - 2026-06-22
 
 ### Added

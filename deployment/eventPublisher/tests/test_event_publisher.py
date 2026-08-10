@@ -1,3 +1,4 @@
+import logging
 import sys
 from unittest.mock import MagicMock
 
@@ -97,3 +98,85 @@ def test_configure_logging_writes_logfile(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     EventPublisher.configure_logging()
     assert (tmp_path / "app.log").exists()
+
+
+# --- Log sanitisation (CWE-117) ---
+
+
+class _RecordCollector(logging.Handler):
+    """Capture records emitted by a specific logger, independent of caplog propagation."""
+
+    def __init__(self):
+        super().__init__()
+        self.records = []
+
+    def emit(self, record):
+        self.records.append(record)
+
+
+def test_sanitize_for_log_strips_newlines():
+    result = EventPublisher.sanitize_for_log("first\r\n2026-01-01 INFO forged entry")
+    assert "\r" not in result
+    assert "\n" not in result
+    # Only the line breaks go; the surrounding text is preserved for debuggability.
+    assert result == "first2026-01-01 INFO forged entry"
+
+
+def test_sanitize_for_log_strips_control_chars():
+    # NUL, ESC (ANSI escape sequences) and a C1 control.
+    result = EventPublisher.sanitize_for_log("a\x00b\x1b[31mc\x85d")
+    assert result == "ab[31mcd"
+
+
+def test_sanitize_for_log_truncates():
+    result = EventPublisher.sanitize_for_log("x" * 1000)
+    assert result == "x" * EventPublisher.LOG_VALUE_MAX_LENGTH + "...[truncated]"
+
+
+def test_sanitize_for_log_accepts_non_str():
+    assert EventPublisher.sanitize_for_log(ValueError("boom\nsecond")) == "boomsecond"
+
+
+def test_encode_error_message_is_sanitized():
+    """The ASN.1 error message embeds values from the unvalidated request body."""
+    encoder = MagicMock()
+    encoder.encode.side_effect = asn1tools.codecs.EncodeError("bad\r\n2026-01-01 INFO forged entry")
+    app = EventPublisher.create_app(producer=MagicMock(), encoder=encoder)
+
+    collector = _RecordCollector()
+    previous_level = app.logger.level
+    app.logger.addHandler(collector)
+    app.logger.setLevel(logging.WARNING)
+    try:
+        resp = app.test_client().post("/api/publish/denm/public/7y0191k4", json={"a": 1})
+    finally:
+        app.logger.removeHandler(collector)
+        app.logger.setLevel(previous_level)
+
+    assert resp.status_code == 400
+    warnings = [r for r in collector.records if r.levelno == logging.WARNING]
+    assert len(warnings) == 1
+    message = warnings[0].getMessage()
+    assert "\r" not in message
+    assert "\n" not in message
+    assert "forged entry" in message
+
+
+def test_publish_logs_sanitized_key():
+    encoder = MagicMock()
+    encoder.encode.return_value = b"\x01\x02\x03"
+    app = EventPublisher.create_app(producer=MagicMock(), encoder=encoder)
+
+    collector = _RecordCollector()
+    previous_level = app.logger.level
+    app.logger.addHandler(collector)
+    app.logger.setLevel(logging.INFO)
+    try:
+        resp = app.test_client().post("/api/publish/denm/public/7y0191k4", json={"a": 1})
+    finally:
+        app.logger.removeHandler(collector)
+        app.logger.setLevel(previous_level)
+
+    assert resp.status_code == 200
+    key_lines = [r.getMessage() for r in collector.records if r.getMessage().startswith("key: ")]
+    assert key_lines == ["key: v2x/denm/public/g8/7/y/0/1/9/1/k/4"]
