@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- CodeQL code scanning (`.github/workflows/codeql.yml`) on every push to `main`, every pull request, and weekly. Analyses run the `security-extended` query suite over the Python services, the React/Vite website, and the GitHub Actions workflows themselves; results appear as code scanning alerts under the repository's Security tab.
+
 ### Changed
 
+- `bandit` now emits SARIF and uploads it to code scanning, so Python SAST findings are tracked as alerts (with dedup and dismissal history) instead of only failing the CI check. The check still fails the build on any finding.
 - Dependabot now applies a conservative `cooldown` to version updates: 30 days for major, 14 for minor and 7 for patch releases (14 days for GitHub Actions, which supports only `default-days`). New releases soak before adoption, giving yanked releases and supply-chain issues time to surface. Security updates are unaffected and still open pull requests immediately.
 
 ## [2.2.0] - 2026-06-22

@@ -1,0 +1,48 @@
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Weekly re-scan so newly published CodeQL queries are applied to code that
+    # has not changed since the last push.
+    - cron: "27 4 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+      actions: read
+    strategy:
+      fail-fast: false
+      matrix:
+        # python                -> deployment/{eventPublisher,kafka_speed_exporter,nifi/nifi-scripts}
+        # javascript-typescript -> website/ (React + Vite)
+        # actions               -> .github/workflows/*.yml
+        language: [python, javascript-typescript, actions]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+          # No compiled first-party source in this repository; the vendored NARs
+          # and connector JARs are binaries whose source lives in the sibling
+          # repositories (instantx-connectors, instantx-metrics).
+          build-mode: none
+          # Wider than the default suite. Drop this line if triage load grows.
+          queries: security-extended
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:${{ matrix.language }}"
