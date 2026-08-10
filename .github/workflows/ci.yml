@@ -51,13 +51,49 @@ jobs:
   sast:
     name: SAST (bandit)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Required to publish the SARIF results as code scanning alerts.
+      security-events: write
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - run: pip install bandit
-      - run: bandit -r deployment/eventPublisher deployment/kafka_speed_exporter deployment/nifi/nifi-scripts/src -c deployment/nifi/nifi-scripts/pyproject.toml
+      # sarif: SARIF report format. toml: parser for the pyproject.toml config on
+      # Python < 3.11 (3.11+ uses the stdlib tomllib). Without it bandit exits 2
+      # and writes an empty report.
+      - run: pip install 'bandit[sarif,toml]'
+      - name: Run bandit
+        id: bandit
+        run: |
+          set +e
+          bandit -r deployment/eventPublisher deployment/kafka_speed_exporter deployment/nifi/nifi-scripts/src \
+            -c deployment/nifi/nifi-scripts/pyproject.toml \
+            -f sarif -o bandit.sarif
+          code=$?
+          set -e
+          # 0 = clean, 1 = findings, >= 2 = bandit itself failed. Findings must not
+          # abort the job before the SARIF upload, but a tool error must — the
+          # report it leaves behind is empty and would wipe the existing alerts.
+          if [ "$code" -ge 2 ]; then
+            echo "::error::bandit exited $code (configuration or runtime error)"
+            exit "$code"
+          fi
+          echo "findings=$code" >> "$GITHUB_OUTPUT"
+      # Pull requests from forks run with a read-only GITHUB_TOKEN, so the upload
+      # is skipped there. The pass/fail gate below still blocks such a PR.
+      - name: Upload bandit SARIF
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: bandit.sarif
+          # Distinct from the CodeQL categories; without it this upload would
+          # replace the CodeQL results for the same commit.
+          category: bandit
+      - name: Fail the build if bandit found issues
+        if: steps.bandit.outputs.findings == '1'
+        run: exit 1
 
   poetry-lock:
     name: Poetry lock is resolvable & current
