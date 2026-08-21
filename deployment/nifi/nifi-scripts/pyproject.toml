@@ -23,7 +23,7 @@ pytest = [
     { version = "^8.4.2", python = "<3.10" },
 ]
 pytest-cov = "^7.1.0"
-ruff = "^0.16.1"
+ruff = "^0.16.3"
 bandit = [
     { version = "^1.9.4", python = ">=3.10" },
     { version = "^1.8.6", python = "<3.10" },
