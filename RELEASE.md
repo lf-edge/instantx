@@ -30,6 +30,43 @@ cd deployment && docker-compose up --build -d
 
 Breaking changes (MAJOR bumps) and any required migration steps are called out in the release notes below and in [CHANGELOG.md](./CHANGELOG.md).
 
+## Release 2.3.0
+
+Backward-compatible release. Upgrade note: Kafka Connect registers the MQTT connectors only on first start, so to pick up the new Sink connector setting on an existing stack, recreate it rather than only rebuilding:
+
+```bash
+cd deployment && docker-compose down && docker-compose up --build -d
+```
+
+The default stack has no persistent volume for Kafka, so this also clears Kafka topics. NiFi named volumes are kept.
+
+Added
+
+- Project website at <https://lf-edge.github.io/instantx/> (`website/`, React + Vite), deployed to GitHub Pages from `main`.
+- CodeQL code scanning on pushes, pull requests and weekly, covering the Python services, the website and the GitHub Actions workflows.
+
+Fixed
+
+- The Event Publisher returns `400` instead of `500` for a body with an unknown enumerated value or a string in an integer field.
+- On a fresh stack, the first message no longer takes up to 5 minutes to reach MQTT: the MQTT Sink connector now checks for new Kafka topics every 10 seconds instead of every 5 minutes.
+- The NiFi scripts' Poetry project resolves again on Python 3.9 and 3.10+, restoring Dependabot security alerts for that package.
+
+Changed
+
+- The NiFi and Kafka speed exporter images install pinned Python dependencies from `requirements.txt` files, so builds are reproducible. The NiFi scripts move to `asn1tools` 0.169.0, matching the Event Publisher (encoded bytes unchanged).
+- Event Publisher dependencies updated (`confluent_kafka` 2.15.1, `prometheus_client` 0.26.0, `asn1tools` 0.169.0).
+- CI tests each Python component against its pinned requirements; `bandit` findings are uploaded to code scanning; Dependabot applies a cooldown to version updates.
+
+Removed
+
+- The `CLAUDE.md ↔ AGENTS.md` symlink setup; `AGENTS.md` is the only agent-instruction file.
+
+Security
+
+- Event Publisher log sanitisation: untrusted values are stripped of control characters and truncated before logging (CWE-117, CodeQL `py/log-injection`).
+- Third-party actions in the release-signing workflow are pinned to commit SHAs.
+- `Werkzeug` 3.1.9 ([GHSA-g6x2-hccm-hh4m](https://github.com/pallets/werkzeug/security/advisories/GHSA-g6x2-hccm-hh4m)).
+
 ## Release 2.2.0
 
 Backward-compatible release (no migration steps).

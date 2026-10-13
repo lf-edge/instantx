@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.0] - 2026-10-14
+
 ### Added
 
+- Project landing page (`website/`, React + Vite, linted with `oxlint`) at <https://lf-edge.github.io/instantx/>, built on pull requests and deployed to GitHub Pages from `main` by `.github/workflows/website.yml`. It includes a panel linking the LF Edge Slack channel. The README links the site and adds Website and CodeQL status badges.
 - CodeQL code scanning (`.github/workflows/codeql.yml`) on every push to `main`, every pull request, and weekly. Analyses run the `security-extended` query suite over the Python services, the React/Vite website, and the GitHub Actions workflows themselves; results appear as code scanning alerts under the repository's Security tab.
 
 ### Changed
@@ -18,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The NiFi and Kafka speed exporter images install pinned Python dependencies from new `requirements.txt` files (`deployment/nifi/` and `deployment/kafka_speed_exporter/`), both tracked by Dependabot. Previously they installed whatever version was latest at build time, so two machines could run different library versions, depending on their Docker build cache.
 - The NiFi scripts now use `asn1tools` 0.169.0 (was 0.167.0), the same version as the Event Publisher. It removes the pyparsing deprecation warnings 0.167.0 emitted; the encoded bytes are unchanged.
 - CI runs each Python test suite in its own virtualenv built from the component's pinned requirements file, instead of one environment with unpinned packages. Dependabot bumps are now tested against the version that actually ships, including `confluent_kafka`, which CI previously did not install at all.
+- Event Publisher runtime dependencies: `confluent_kafka` 2.14.2 → 2.15.1, `prometheus_client` 0.25.0 → 0.26.0 and `asn1tools` 0.167.0 → 0.169.0 (`Werkzeug` is listed under Security).
+- CI uses `actions/checkout` v7 and `actions/setup-python` v7.
 
 ### Removed
 
@@ -27,10 +32,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Event Publisher returns `400` instead of `500` for a body with an unknown enumerated value (e.g. `"altitudeConfidence": "nope"`) or a string in an integer field. `asn1tools` raises `KeyError`/`TypeError` for these rather than `EncodeError`, which was the only error handled.
 - On a fresh stack, the first message no longer takes up to 5 minutes to reach MQTT. `v2x.denm.public` is created by the first POST, after the MQTT Sink connector has subscribed to `topics.regex`, and the connector only discovered new matching topics on its default 5-minute metadata refresh. It now refreshes every 10 s (`consumer.override.metadata.max.age.ms`). The connector config is registered on first start only, so an existing stack picks this up after `docker-compose down && docker-compose up -d`.
+- The NiFi scripts' Poetry project (`deployment/nifi/nifi-scripts`) resolves again. `pytest` 9.x and `bandit` 1.9.x require Python 3.10+, while the project supports 3.9+, so `poetry install` failed and GitHub's dependency graph for this package was degraded, which meant Dependabot security alerts were not generated for it. The two tools now declare a version per Python range, `poetry.lock` is committed, and a `poetry-lock` CI job (`poetry check --lock`) catches a recurrence.
 
 ### Security
 
-- Untrusted values are sanitised before being written to the Event Publisher log: control characters (including CR and LF) are stripped and long values truncated. This closes CodeQL alert `py/log-injection` (CWE-117) and, more importantly, hardens the ASN.1 encoding-error path, where field names and values from an otherwise unvalidated request body reached the log and could have been used to forge log entries.
+- Untrusted values are sanitised before being written to the Event Publisher log: control characters (including CR and LF) are stripped and values longer than `LOG_VALUE_MAX_LENGTH` (optional in `config.py`, default 256) are truncated. This closes CodeQL alert `py/log-injection` (CWE-117) and, more importantly, hardens the ASN.1 encoding-error path, where field names and values from an otherwise unvalidated request body reached the log and could have been used to forge log entries.
+- The release-signing workflow pins its third-party actions (`sigstore/cosign-installer`, `softprops/action-gh-release`) to full commit SHAs instead of mutable tags. The job holds `contents: write` and `id-token: write`, so a compromised upstream tag could otherwise have run code able to publish and sign releases. Dependabot keeps the SHAs current. This resolves the CodeQL `actions/unpinned-tag` alerts.
+- Event Publisher `Werkzeug` 3.1.8 → 3.1.9, a security release that fixes [GHSA-g6x2-hccm-hh4m](https://github.com/pallets/werkzeug/security/advisories/GHSA-g6x2-hccm-hh4m) (`safe_join` and Windows device names; the shipped image is Linux-based).
 
 ## [2.2.0] - 2026-06-22
 
@@ -70,7 +78,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `GOVERNANCE.md`, `ROADMAP.md`, `docs/Threat-Model.md`, and `docs/Security-Architecture.md`.
 - Developer Certificate of Origin (DCO) sign-off requirement (documented in `CONTRIBUTING.md`, enforced in CI).
 - Release-signing workflow (`.github/workflows/release.yml`): on every `v*` tag, builds a source archive and signs it with cosign (keyless, Sigstore) before publishing a GitHub Release.
-- Project landing page (`website/`, React + Vite) deployed to GitHub Pages via `.github/workflows/website.yml` (<https://lf-edge.github.io/instantx/>).
 
 ### Changed
 
