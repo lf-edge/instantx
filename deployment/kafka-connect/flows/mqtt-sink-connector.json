@@ -6,6 +6,7 @@
 	"key.converter": "org.apache.kafka.connect.storage.StringConverter",
 	"value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
 	"topics.regex": "v2x.(cam|denm).*",
+	"consumer.override.metadata.max.age.ms": "10000",
 	"mqtt.broker": "tcp://mqtt:1883",
 	"mqtt.clientID": "clientSink",
 	"mqtt.qos": "1",

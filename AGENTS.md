@@ -66,6 +66,7 @@ Managed via Poetry in `deployment/nifi/nifi-scripts`:
 When modifying code or configurations, enforce the following constraints:
 
 - **Duplicated ASN.1 Schemas:** Schemas exist in both `deployment/eventPublisher/asn/` and `deployment/nifi/asn/`. If you modify a schema, **update both locations**.
+- **Duplicated NiFi Python Dependencies:** The NiFi image installs `deployment/nifi/requirements.txt` (exact pins); the NiFi scripts' Poetry project declares the same libraries in `nifi-scripts/pyproject.toml`. If you change one, **update the other**.
 - **Test Environment Paths:** `test_main_function_with_valid_input` in the NiFi tests resolves `DATA_FOLDER` relative to the test file (`../../asn`). Keep it relative — do not reintroduce machine-specific absolute paths.
 - **NiFi Flow Bootstrapping:** The flow is bootstrapped by `nifi-setup` via `nifi-init.sh`, pulling `flow.json` from the Registry. UI edits do not update the committed `flow.json`.
 - **Vendored Binaries:** Custom NARs and connector JARs are committed as binaries. Their source code lives in sibling repositories (`instantx-connectors`, `instantx-metrics`).

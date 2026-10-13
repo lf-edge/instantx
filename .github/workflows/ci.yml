@@ -21,18 +21,30 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install test dependencies
-        run: pip install pytest pytest-cov flask asn1tools xmltodict prometheus_client
+      # Each suite gets its own virtualenv with the component's pinned requirements file, so a
+      # Dependabot bump is tested against the exact version its Docker image installs.
       - name: Event Publisher tests (>=80% coverage)
-        run: pytest deployment/eventPublisher/tests --cov=EventPublisher --cov=config --cov-report=term-missing --cov-fail-under=80
+        run: |
+          python -m venv "$RUNNER_TEMP/venv-event-publisher"
+          . "$RUNNER_TEMP/venv-event-publisher/bin/activate"
+          pip install -r deployment/eventPublisher/requirements.txt pytest pytest-cov
+          pytest deployment/eventPublisher/tests --cov=EventPublisher --cov=config --cov-report=term-missing --cov-fail-under=80
         env:
           PYTHONPATH: deployment/eventPublisher
       - name: Kafka speed exporter tests (>=80% coverage)
-        run: pytest deployment/kafka_speed_exporter/tests --cov=kafka_speed_exporter --cov-report=term-missing --cov-fail-under=80
+        run: |
+          python -m venv "$RUNNER_TEMP/venv-kafka-speed-exporter"
+          . "$RUNNER_TEMP/venv-kafka-speed-exporter/bin/activate"
+          pip install -r deployment/kafka_speed_exporter/requirements.txt pytest pytest-cov
+          pytest deployment/kafka_speed_exporter/tests --cov=kafka_speed_exporter --cov-report=term-missing --cov-fail-under=80
         env:
           PYTHONPATH: deployment/kafka_speed_exporter
       - name: NiFi scripts tests (>=80% coverage)
-        run: pytest deployment/nifi/nifi-scripts --cov=src --cov-report=term-missing --cov-fail-under=80
+        run: |
+          python -m venv "$RUNNER_TEMP/venv-nifi-scripts"
+          . "$RUNNER_TEMP/venv-nifi-scripts/bin/activate"
+          pip install -r deployment/nifi/requirements.txt pytest pytest-cov
+          pytest deployment/nifi/nifi-scripts --cov=src --cov-report=term-missing --cov-fail-under=80
         env:
           PYTHONPATH: deployment/nifi/nifi-scripts
 

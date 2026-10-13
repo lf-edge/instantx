@@ -1,3 +1,4 @@
+import copy
 import logging
 import sys
 from unittest.mock import MagicMock
@@ -180,3 +181,88 @@ def test_publish_logs_sanitized_key():
     assert resp.status_code == 200
     key_lines = [r.getMessage() for r in collector.records if r.getMessage().startswith("key: ")]
     assert key_lines == ["key: v2x/denm/public/g8/7/y/0/1/9/1/k/4"]
+
+
+# --- Real ASN.1 encoder (exercises the asn1tools version pinned in requirements.txt) ---
+
+# The reference DENM from docs/HTTP-Integration-Testing.md and its UPER encoding. If an
+# asn1tools upgrade changes these bytes, subscribers would receive a different payload.
+REFERENCE_DENM = {
+    "header": {"protocolVersion": 2, "messageID": 1, "stationID": 123456},
+    "denm": {
+        "management": {
+            "actionID": {"originatingStationID": 123456, "sequenceNumber": 1},
+            "detectionTime": 649940045094,
+            "referenceTime": 649940045094,
+            "eventPosition": {
+                "latitude": 367225309,
+                "longitude": -43965883,
+                "positionConfidenceEllipse": {
+                    "semiMajorConfidence": 4095,
+                    "semiMinorConfidence": 4095,
+                    "semiMajorOrientation": 3601,
+                },
+                "altitude": {"altitudeValue": 0, "altitudeConfidence": "unavailable"},
+            },
+            "relevanceDistance": "lessThan500m",
+            "validityDuration": 60,
+            "stationType": 10,
+        },
+        "situation": {"informationQuality": 0, "eventType": {"causeCode": 95, "subCauseCode": 0}},
+        "location": {
+            "eventPositionHeading": {"headingValue": 0, "headingConfidence": 127},
+            "traces": [[{"pathPosition": {"deltaLatitude": 2117, "deltaLongitude": 5821, "deltaAltitude": 0}}]],
+        },
+    },
+}
+REFERENCE_DENM_UPER_HEX = (
+    "02010001e240c50000f120000092ea6e41a4c4ba9b906934b8852dd68aaf445ffffffe11186a0f6003c0a00be004001f8028211216bc6338"
+)
+
+
+@pytest.fixture(scope="module")
+def real_encoder():
+    return EventPublisher.build_encoder()
+
+
+@pytest.fixture
+def real_client(real_encoder):
+    producer = MagicMock()
+    app = EventPublisher.create_app(producer=producer, encoder=real_encoder)
+    app.config.update(TESTING=True)
+    return app.test_client(), producer
+
+
+def _reference_denm_with(path, value):
+    body = copy.deepcopy(REFERENCE_DENM)
+    target = body
+    for key in path[:-1]:
+        target = target[key]
+    target[path[-1]] = value
+    return body
+
+
+def test_reference_denm_encodes_to_known_bytes(real_client):
+    client, producer = real_client
+    resp = client.post("/api/publish/denm/public/7y0191k4", json=REFERENCE_DENM)
+    assert resp.status_code == 200
+    assert producer.produce.call_args.kwargs["key"] == "v2x/denm/public/g8/7/y/0/1/9/1/k/4"
+    assert producer.produce.call_args.kwargs["value"] == REFERENCE_DENM_UPER_HEX
+
+
+@pytest.mark.parametrize(
+    "path, value",
+    [
+        # asn1tools raises a different exception for each; all are client errors (400), not 500.
+        (("denm",), None),  # EncodeError: wrong type for a SEQUENCE
+        (("denm", "management", "relevanceDistance"), "nope"),  # KeyError: unknown ENUMERATED value
+        (("denm", "management", "validityDuration"), "sixty"),  # TypeError: string in an INTEGER field
+    ],
+    ids=["encode-error", "unknown-enum", "string-for-integer"],
+)
+def test_schema_mismatch_returns_400(real_client, path, value):
+    client, producer = real_client
+    resp = client.post("/api/publish/denm/public/7y0191k4", json=_reference_denm_with(path, value))
+    assert resp.status_code == 400
+    assert resp.get_json() == {"error": "payload does not conform to the message schema"}
+    producer.produce.assert_not_called()

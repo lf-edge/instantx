@@ -2,13 +2,14 @@
 
 [[package]]
 name = "asn1tools"
-version = "0.167.0"
+version = "0.169.0"
 description = "ASN.1 parsing, encoding and decoding."
 optional = false
 python-versions = "*"
 groups = ["main"]
 files = [
-    {file = "asn1tools-0.167.0.tar.gz", hash = "sha256:cad53f6f6d788a6eec5e37543401cd8c39f138cc8016b64629ec29fb4735f5b2"},
+    {file = "asn1tools-0.169.0-py3-none-any.whl", hash = "sha256:2efc6a83d3ad3c57aea313d7896ffeca82d83155668620a54c88f426ea0eded1"},
+    {file = "asn1tools-0.169.0.tar.gz", hash = "sha256:3d15caab63d8d27e8ddd0c3ad88975bbd3d48a359070d87be894bba1df767a50"},
 ]
 
 [package.dependencies]
@@ -912,4 +913,4 @@ test = ["pytest", "pytest-cov"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9"
-content-hash = "60d8995e22c4f451a0e78edb15f903e10e873a9040a8274f8cf65213d31051e3"
+content-hash = "4e84aaff046a8a3284fdccac8f283e86f8235c48f2f3ffda111f277cde60dc2f"

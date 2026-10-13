@@ -38,6 +38,30 @@ updates:
       semver-minor-days: 14
       semver-patch-days: 7
 
+  # NiFi image runtime libraries (pip / requirements.txt, installed by Dockerfile.nifi)
+  - package-ecosystem: "pip"
+    directory: "/deployment/nifi"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    cooldown:
+      default-days: 14
+      semver-major-days: 30
+      semver-minor-days: 14
+      semver-patch-days: 7
+
+  # Kafka speed exporter (pip / requirements.txt)
+  - package-ecosystem: "pip"
+    directory: "/deployment/kafka_speed_exporter"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    cooldown:
+      default-days: 14
+      semver-major-days: 30
+      semver-minor-days: 14
+      semver-patch-days: 7
+
   # GitHub Actions workflows (for when CI is added)
   - package-ecosystem: "github-actions"
     directory: "/"

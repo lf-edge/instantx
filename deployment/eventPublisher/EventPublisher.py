@@ -140,10 +140,13 @@ def create_app(producer=None, encoder=None):
         message_type = sub_service.upper()
         try:
             encoded = encoder.encode(message_type, data)
-        except asn1tools.codecs.EncodeError as exc:
+        except (asn1tools.codecs.EncodeError, KeyError, TypeError) as exc:
+            # asn1tools reports most schema mismatches as EncodeError, but not all: an unknown
+            # ENUMERATED value raises KeyError and a string in an INTEGER field raises TypeError.
+            # The schemas are compiled at startup, so any of these here is a bad request body.
             # The exception message embeds field names and values from the request body,
             # which is unvalidated beyond being a JSON object -- sanitise before logging.
-            app.logger.warning("Encoding failed: %s", sanitize_for_log(exc))
+            app.logger.warning("Encoding failed (%s): %s", type(exc).__name__, sanitize_for_log(exc))
             return jsonify({"error": "payload does not conform to the message schema"}), 400
 
         message = hexlify(encoded).decode("ascii")
