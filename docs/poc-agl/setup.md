@@ -12,7 +12,7 @@
 - Download the required files.
 - Install QEMU and VNC Viewer (instead of Vinagre).
 
-    ```sh
+    ```bash
     mkdir ~/agl-demo/
     cp ~/Downloads/agl-ivi-demo-qt-qemuarm64.ext4.xz ~/agl-demo/
     cp ~/Downloads/Image ~/agl-demo/
@@ -24,7 +24,7 @@
 
 - To run the QEMU image and open port 55555, use the following command (hostfwd=tcp::55555-:55555):
 
-    ```sh
+    ```bash
     qemu-system-aarch64 -cpu cortex-a57 -machine virt -nographic \
     -net nic,model=virtio,macaddr=52:54:00:12:34:58 \
     -net user,hostfwd=tcp::55555-:55555 -m 2048 -monitor none -smp 2 -device usb-ehci \
@@ -43,7 +43,7 @@
   - `Ctrl + a`, then `n`: Switch to the next window.
 - Go to `/etc/default` and edit the configuration `kuksa-databroker` and add at the end of the command `--address 0.0.0.0`
 
-    ```sh
+    ```bash
     cd /etc/default
     vim kuksa-databroker
     ```
@@ -52,7 +52,7 @@
 
 - Restart the kuksa-databroker service:
 
-    ```sh
+    ```bash
     systemctl restart kuksa-databroker
     ```
 
@@ -60,7 +60,7 @@
 
 - In one `screen` window, start the Kuksa client:
 
-    ```sh
+    ```bash
     kuksa-client grpcs://localhost:55555 --cacertificate /etc/kuksa-val/CA.pem --tls-server-name localhost
     ```
 
@@ -68,19 +68,19 @@
 
 - To authenticate in Kuksa:
 
-    ```sh
+    ```bash
     authorize /etc/kuksa-can-provider/can-provider.token
     ```
 
 - To check the vehicle speed:
 
-    ```sh
+    ```bash
     getValue Vehicle.Speed
     ```
 
 - In another window ( with `Ctrl + a`, then `c`), start the CAN simulator:
 
-    ```sh
+    ```bash
     python3 /usr/sbin/simple_can_simulator.py can0
     ```
 
@@ -90,7 +90,7 @@
 
 - Clone the repository:
 
-    ```sh
+    ```bash
     cd ~/agl-demo
     sudo apt install git
     git clone <https://git.automotivelinux.org/src/agl-vss-proxy>
@@ -98,43 +98,43 @@
 
 - Install required dependencies:
 
-    ```sh
+    ```bash
     sudo apt install g++ protobuf-compiler libprotobuf-dev libgrpc++-dev \
     libglib2.0-dev libssl-dev libmosquitto-dev libyaml-cpp-dev meson ninja-build git
     ```
 
 - Clone the kuksa-databroker repository for protobuf definitions:
 
-    ```sh
+    ```bash
     cd ~/agl-demo
     git clone <https://github.com/eclipse-kuksa/kuksa-databroker>
     ```
 
 - Install grpc_cpp_plugin:
 
-    ```sh
+    ```bash
     sudo apt install protobuf-compiler-grpc
     ```
 
 - Install libsystemd:
 
-    ```sh
+    ```bash
     sudo apt-get install --reinstall libsystemd-dev
     ```
 
 - Modify `meson.build` file, adding the dependency `libsystemd` instead of `systemd`:
 
-    ```sh
+    ```bash
     cd ~/agl-demo/agl-vss-proxy/systemd
     ```
 
-    ```sh
+    ```bash
     sudo nano meson.build
     ```
 
 - Build agl-vss-proxy (adjust the proto path as needed):
 
-    ```sh
+    ```bash
     cd ~/agl-demo/agl-vss-proxy
     sudo apt install cmake
     meson -Dprotos=$HOME/agl-demo/kuksa-databroker/proto build
@@ -144,7 +144,7 @@
 
 - Create the configuration file `/etc/agl-vss-proxy/config.yaml`:
 
-    ```sh
+    ```bash
     sudo mkdir -p /etc/agl-vss-proxy && sudo tee /etc/agl-vss-proxy/config.yaml > /dev/null <<EOF
         kuksa:
         hostname: localhost
@@ -167,7 +167,7 @@
 
 - Create the `CA.pem` certificate and the token in the specified path:
 
-    ```sh
+    ```bash
     cd ~/agl-demo/
     echo "-----BEGIN CERTIFICATE-----
     MIID3zCCAscCFDixxnLKOE9pr9sDQynjRqX7u+TlMA0GCSqGSIb3DQEBCwUAMIGr
@@ -194,13 +194,13 @@
     -----END CERTIFICATE-----" > CA.pem
     ```
 
-    ```sh
+    ```bash
     wget <https://git.automotivelinux.org/AGL/meta-agl-demo/plain/recipes-connectivity/agl-vss-proxy/agl-vss-proxy/agl-vss-proxy.token>
     ```
 
 - Run agl-vss-proxy:
 
-    ```sh
+    ```bash
     cd ~/agl-demo/agl-vss-proxy/build/src/
     ./agl-vss-proxy
     ```
@@ -213,14 +213,14 @@ Below are the new steps to integrate instantX into your setup. Do not modify pre
 
 - Clone the instantX Repository from Github
 
-    ```sh
+    ```bash
     cd ~/agl-demo/
     git clone https://github.com/lf-edge/instantx.git
     ```
 
 - Install Docker
 
-    ```sh
+    ```bash
     sudo apt-get update
     sudo apt-get upgrade
     sudo apt install curl
@@ -229,13 +229,13 @@ Below are the new steps to integrate instantX into your setup. Do not modify pre
 
 - Install QEMU for emulation in Docker
 
-    ```sh
+    ```bash
     sudo apt install qemu-user-static binfmt-support
     ```
 
 - Start the Docker Environment
 
-    ```sh
+    ```bash
     cd ~/instantx-platform/deployment
     sudo docker compose up -d
     ```

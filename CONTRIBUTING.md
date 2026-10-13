@@ -102,7 +102,7 @@ We appreciate your contribution to this project! If you have any questions, feel
 
 All contributions must be signed off under the [Developer Certificate of Origin](https://developercertificate.org/). Add a `Signed-off-by` line to every commit by committing with `-s`:
 
-```sh
+```bash
 git commit -s -m "Your message"
 ```
 

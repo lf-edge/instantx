@@ -24,7 +24,7 @@ environment.
 
 ## Trust boundaries & data flow
 
-```
+```bash
 [External publisher] --HTTP--> (1) Event Publisher API (Flask)
         --> Kafka (v2x.denm.public) --> Kafka Connect (MQTT source/sink)
         --> (2) MQTT broker (HiveMQ CE) --> [Subscribers]
@@ -35,6 +35,7 @@ environment.
 ```
 
 Trust boundaries (where data crosses from less-trusted to more-trusted):
+
 1. **Untrusted client → Event Publisher API** — arbitrary HTTP input.
 2. **Edge ↔ broker network** — messages in transit between components and to subscribers.
 3. **External AMQP source → NiFi** — externally-supplied payloads.
@@ -43,7 +44,7 @@ Trust boundaries (where data crosses from less-trusted to more-trusted):
 ## Threats and mitigations (STRIDE per boundary)
 
 | # | Boundary | Threat (STRIDE) | Mitigation |
-|---|----------|-----------------|------------|
+| --- | ---------- | ----------------- | ------------ |
 | 1 | Client → API | **Tampering / DoS** via malformed or oversized bodies | Allowlist validation of `sub_service`, `sub_service_group`, and `geohash`; request size limit (`MAX_CONTENT_LENGTH`); schema-driven UPER encoding rejects non-conforming payloads with HTTP 400. |
 | 1 | Client → API | **Spoofing / Elevation** | API performs no privileged action beyond producing to Kafka; deployments SHOULD place the API behind an authenticating gateway/TLS terminator (operator responsibility). |
 | 2 | In transit | **Information disclosure / MITM** | Transport is delegated to the brokers' standard TLS (MQTT/Kafka) and HTTPS; operators enable TLS 1.2+ and certificate verification (see Security-Architecture). |
