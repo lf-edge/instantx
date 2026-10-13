@@ -23,12 +23,9 @@ Thumbs.db
 .settings/
 
 # === AI assistants & coding agents ===
-# CLAUDE.md and any shared .claude/ config are intentionally committed —
+# Shared .claude/ config is intentionally committed —
 # only local-only / per-developer AI artifacts are ignored here.
 .claude/settings.local.json
-CLAUDE.local.md
-# Use AGENTS.md instead
-CLAUDE.md
 # Aider (chat history, input history, tag cache)
 .aider*
 # Cursor (local indexing hints)
