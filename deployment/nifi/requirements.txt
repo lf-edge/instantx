@@ -1,0 +1,5 @@
+# Python libraries for the NiFi encoder/decoder scripts, installed into the NiFi image
+# (see Dockerfile.nifi). Keep these in step with the runtime dependencies declared in
+# nifi-scripts/pyproject.toml, which is what the unit tests run against.
+asn1tools==0.169.0
+xmltodict==1.0.4

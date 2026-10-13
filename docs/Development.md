@@ -56,6 +56,12 @@ cd deployment/eventPublisher
 pip install -r requirements.txt
 ```
 
+The other Docker images install pinned files too: `deployment/kafka_speed_exporter/requirements.txt`,
+and `deployment/nifi/requirements.txt` for the libraries the NiFi scripts use inside the NiFi image.
+Keep the latter in step with the runtime dependencies in `nifi-scripts/pyproject.toml`. CI runs each
+test suite in its own virtualenv built from the matching requirements file, so a Dependabot bump is
+tested against the exact version that ships.
+
 All build and analysis tools used here are free/libre and open source (Docker, Poetry, pytest, ruff, bandit).
 
 ## Test

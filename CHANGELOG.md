@@ -15,10 +15,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `bandit` now emits SARIF and uploads it to code scanning, so Python SAST findings are tracked as alerts (with dedup and dismissal history) instead of only failing the CI check. The check still fails the build on any finding.
 - Dependabot now applies a conservative `cooldown` to version updates: 30 days for major, 14 for minor and 7 for patch releases (14 days for GitHub Actions, which supports only `default-days`). New releases soak before adoption, giving yanked releases and supply-chain issues time to surface. Security updates are unaffected and still open pull requests immediately.
+- The NiFi and Kafka speed exporter images install pinned Python dependencies from new `requirements.txt` files (`deployment/nifi/` and `deployment/kafka_speed_exporter/`), both tracked by Dependabot. Previously they installed whatever version was latest at build time, so two machines could run different library versions, depending on their Docker build cache.
+- The NiFi scripts now use `asn1tools` 0.169.0 (was 0.167.0), the same version as the Event Publisher. It removes the pyparsing deprecation warnings 0.167.0 emitted; the encoded bytes are unchanged.
+- CI runs each Python test suite in its own virtualenv built from the component's pinned requirements file, instead of one environment with unpinned packages. Dependabot bumps are now tested against the version that actually ships, including `confluent_kafka`, which CI previously did not install at all.
 
 ### Removed
 
 - The Claude Code-specific instruction-file setup: the symlink instructions in `AGENTS.md` and the matching `.gitignore` entries. The repository follows the [AGENTS.md](https://agents.md) standard, with `AGENTS.md` as its only agent-instruction file.
+
+### Fixed
+
+- Event Publisher returns `400` instead of `500` for a body with an unknown enumerated value (e.g. `"altitudeConfidence": "nope"`) or a string in an integer field. `asn1tools` raises `KeyError`/`TypeError` for these rather than `EncodeError`, which was the only error handled.
+- On a fresh stack, the first message no longer takes up to 5 minutes to reach MQTT. `v2x.denm.public` is created by the first POST, after the MQTT Sink connector has subscribed to `topics.regex`, and the connector only discovered new matching topics on its default 5-minute metadata refresh. It now refreshes every 10 s (`consumer.override.metadata.max.age.ms`). The connector config is registered on first start only, so an existing stack picks this up after `docker-compose down && docker-compose up -d`.
 
 ### Security
 
