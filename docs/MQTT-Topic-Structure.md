@@ -54,4 +54,3 @@ When publishing messages, clients should adhere to the defined geohash-based top
 ## Conclusion
 
 Utilizing a geohash-based MQTT topic structure allows for efficient communication and management of spatial data in IoT applications. By subscribing to and publishing messages within specific regions of varying sizes, IoT systems can effectively handle spatially distributed information.
-

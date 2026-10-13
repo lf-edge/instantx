@@ -1,8 +1,9 @@
 # Maintainers
 
-- [Introduction](#introduction)
-- [Active Maintainers](#active-maintainers)
-- [Retired Maintainers](#retired-maintainers)
+- [Maintainers](#maintainers)
+  - [Introduction](#introduction)
+  - [Active Maintainers](#active-maintainers)
+  - [Retired Maintainers](#retired-maintainers)
 
 ## Introduction
 
@@ -11,7 +12,7 @@ This document lists the maintainers of this repository. See the [Contributing gu
 ## Active Maintainers
 
 | Name | GitHub | Affiliation | Email |
-|------|--------|-------------|-------|
+| ------ | -------- | ------------- | ------- |
 | George Stoian | [georgestoian](https://github.com/georgestoian) | Vodafone Group | <george.stoian@vodafone.com> |
 | Luis Perez | [luisalfredo-perez_voda](https://github.com/luisalfredo-perez_voda) | Vodafone Group | <luisalfredo.perez@vodafone.com> |
 | Natalia Gorokhova | [baklgns](https://github.com/baklgns) | Vodafone Group | <natalia.gorokhova@vodafone.com> |
@@ -21,4 +22,3 @@ This document lists the maintainers of this repository. See the [Contributing gu
 
 | Name | GitHub | Email |
 |------|--------|-------|
-| | | |

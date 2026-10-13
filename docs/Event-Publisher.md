@@ -25,25 +25,25 @@ Install dependencies:
 
 1. Update the `eventPublisher/config.py` file with your API credentials and Kafka configuration:
 
-    ```python
-    # Address of the Kafka broker, which is the server that manages the Kafka cluster.
-    KAFKA_BROKER = 'kafka:9092'
+        ```python
+        # Address of the Kafka broker, which is the server that manages the Kafka cluster.
+        KAFKA_BROKER = 'kafka:9092'
 
-    # The Kafka topic where DENM/IVIM data will be published.
-    KAFKA_TOPIC = 'v2x.denm.public'
+        # The Kafka topic where DENM/IVIM data will be published.
+        KAFKA_TOPIC = 'v2x.denm.public'
 
-    # Port number for the Prometheus server, used for monitoring and metrics.
-    PROMETHEUS_SERVER = 8000
+        # Port number for the Prometheus server, used for monitoring and metrics.
+        PROMETHEUS_SERVER = 8000
 
-    # Port number on which the Event Publisher service will run.
-    port = 5000
+        # Port number on which the Event Publisher service will run.
+        port = 5000
 
-    # Name of the metric that tracks the count of incoming messages.
-    MESSAGES_COUNT_METRICS = 'incoming_messages'
-    ```
+        # Name of the metric that tracks the count of incoming messages.
+        MESSAGES_COUNT_METRICS = 'incoming_messages'
+        ```
 
 You can also run the service directly in your local Python environment we to do that you will change `eventPublisher/config.py` file to set host and port for `KAFKA_BROKER` to connect outside from Docker.
 
-```bash
-python eventPublisher/EventPublisher.py
-```
+    ```bash
+    python eventPublisher/EventPublisher.py
+    ```

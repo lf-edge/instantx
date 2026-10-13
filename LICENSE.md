@@ -2,17 +2,16 @@
 
 This project includes software packages under the deployment folder that are licensed under different licenses – MIT or Apache 2.
 
-# Important Notes:
+# Important Notes
 
 Each software package's LICENSE file contains the full text of the license governing that package.
 Ensure you review and comply with the terms of each license as specified in the respective LICENSE files.
 If you have any questions or need further clarification regarding the licenses, please contact the project maintainers.
 By using this project, you agree to adhere to the terms and conditions of the licenses specified in the LICENSE files of the respective packages.
 
-
 # MIT License
 
-MIT License 
+MIT License
 
 Copyright (c) 2024 Vodafone
 
@@ -33,7 +32,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
 
 # Apache License
 

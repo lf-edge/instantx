@@ -249,4 +249,3 @@ Intelligent Transport Systems
                 headingConfidence: unavailable (127)
             traces: 1 item
 ```
-

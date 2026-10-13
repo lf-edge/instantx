@@ -8,7 +8,7 @@ A release is cut by pushing a `v*` tag (e.g. `git tag v2.1.0 && git push origin 
 
 To verify a downloaded release archive:
 
-```sh
+```bash
 cosign verify-blob \
   --certificate "instantx-<version>.tar.gz.pem" \
   --signature "instantx-<version>.tar.gz.sig" \
@@ -23,7 +23,7 @@ The release-manager role is described in [GOVERNANCE.md](./GOVERNANCE.md).
 
 Versions follow SemVer: upgrades within the same MAJOR are backward compatible. To upgrade, check out the new tag and rebuild the stack:
 
-```sh
+```bash
 git fetch --tags && git checkout <new-tag>
 cd deployment && docker-compose up --build -d
 ```

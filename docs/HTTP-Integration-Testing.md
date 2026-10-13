@@ -8,7 +8,7 @@ For raw MQTT publish/subscribe (installing the clients, broker connection detail
 
 ## 1. How a message flows
 
-```
+```bash
 curl  ──HTTP POST──▶  Event Publisher (api-service:5000)
                           │  validates input, UPER-encodes the DENM,
                           │  hexlifies it to an ASCII string
@@ -38,7 +38,7 @@ Two facts that drive the rest of this guide:
 ## 3. Connection variables
 
 | Variable | Value | Notes |
-|---|---|---|
+| --- | --- | --- |
 | API base URL | `http://localhost:5000` | The `api-service` container, published as `5000:5000`. |
 | Endpoint | `POST /api/publish/<sub_service>/<sub_service_group>/<geohash>` | `sub_service` must be `denm`; group matches `^[a-z0-9_-]{1,32}$`; geohash matches `^[0-9bcdefghjkmnpqrstuvwxyz]{1,12}$`. |
 | Kafka topic | `v2x.denm.public` | Fixed; the geohash travels as the Kafka **key**, not in the topic name. |
@@ -115,7 +115,7 @@ curl -i -X POST http://localhost:5000/api/publish/denm/public/7y0191k4 \
 
 The service adds 0.5–1.5 s of jitter per request, so the response is not instant. Expected response:
 
-```
+```bash
 HTTP/1.1 200 OK
 ...
 {"key":"v2x/denm/public/g8/7/y/0/1/9/1/k/4","message":"Message processed successfully","sub_service":"DENM","topic":"v2x.denm.public"}
@@ -142,7 +142,7 @@ mosquitto_sub \
 
 With the subscriber running, re-run the [section 5](#5-send-a-message-http-post) POST from another terminal. The subscriber prints the topic followed by the UPER payload as a hex string, for example:
 
-```
+```bash
 v2x/denm/public/g8/7/y/0/1/9/1/k/4 02010001e240c50000f120000092ea6e41a4c4ba9b906934...
 ```
 
@@ -153,7 +153,7 @@ v2x/denm/public/g8/7/y/0/1/9/1/k/4 02010001e240c50000f120000092ea6e41a4c4ba9b906
 The API validates every path segment and the body before encoding. These calls return `400` (or `413`) and never reach Kafka — useful for confirming the API rejects bad input:
 
 | Command (abbreviated) | Response |
-|---|---|
+| --- | --- |
 | `POST /api/publish/unknown/public/7y0191k4` | `400 {"error":"unsupported sub_service"}` |
 | `POST /api/publish/denm/bad.group/7y0191k4` | `400 {"error":"invalid sub_service_group"}` |
 | `POST /api/publish/denm/public/ailo` | `400 {"error":"invalid geohash"}` (a, i, l, o are not in the geohash alphabet) |
@@ -172,7 +172,7 @@ curl -i -X POST http://localhost:5000/api/publish/denm/public/ailo \
 ## 8. Troubleshooting
 
 | Symptom | Likely cause |
-|---|---|
+| --- | --- |
 | `curl: (7) Failed to connect to localhost port 5000` | `api-service` is down or the port is not published. Re-run [section 4](#4-start--verify-the-stack) and check `docker-compose logs api-service`. |
 | `400 {"error":"payload does not conform to the message schema"}` | The JSON body is not a valid DENM. Use the exact body from [section 5](#5-send-a-message-http-post). |
 | POST returns `200` but nothing appears on MQTT | The MQTT Sink connector is not `RUNNING`, or you subscribed to the wrong topic. Check `curl http://localhost:8083/connectors/MQTTSinkConnector/status` and subscribe to `v2x/denm/public/g8/#`. |

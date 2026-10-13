@@ -11,7 +11,7 @@ This guide shows how to manually validate the InstantX MQTT publish/subscribe fl
 Install the `mosquitto` clients (`mosquitto_pub` / `mosquitto_sub`). You only need the **clients**, not the broker: the broker already runs in Docker.
 
 | Platform | Command |
-|---|---|
+| --- | --- |
 | macOS (Homebrew) | `brew install mosquitto` |
 | Debian / Ubuntu | `sudo apt install mosquitto-clients` |
 | Windows (winget) | `winget install EclipseFoundation.Mosquitto` |
@@ -28,7 +28,7 @@ mosquitto_sub --help
 ## 2. Connection variables
 
 | Variable | Value | Notes |
-|---|---|---|
+| --- | --- | --- |
 | Host | `localhost` | From your host machine. From another container on the stack network, use the service name `mqtt`. |
 | Port | `1883` | Plain MQTT, published by the `mqtt` service in `deployment/docker-compose.yml`. |
 | Username | _(none by default)_ | The default stack runs HiveMQ CE with anonymous access — no credentials required. See note below. |
@@ -63,7 +63,7 @@ docker ps --filter "name=instantx_mqtt" --format "table {{.Names}}\t{{.Status}}\
 
 Expected output (truncated):
 
-```
+```bash
 NAMES            STATUS         PORTS
 instantx_mqtt    Up 10 seconds  0.0.0.0:1883->1883/tcp, ...
 ```
@@ -108,7 +108,7 @@ mosquitto_pub \
 2. In a second terminal, export the same variables and run the publisher from [section 5](#5-publisher-producer).
 3. Switch back to the subscriber terminal. You should immediately see:
 
-   ```
+   ```bash
    v2x/denm/public/g8/7/y/0/1/9/1/k/4 {"test":"hello-instantx"}
    ```
 
@@ -135,7 +135,7 @@ If the line appears, the publish/subscribe flow through the broker works. Press 
 ## 8. Troubleshooting
 
 | Symptom | Likely cause |
-|---|---|
+| --- | --- |
 | `Connection Refused: not authorised` | The broker now enforces auth and your `-u` / `-P` are wrong or missing. Re-check the credentials supplied to the stack. |
 | `Error: Connection refused` (cannot reach host) | Port `1883` is not published, or the broker container is down. Re-run [section 3](#3-start--verify-the-broker-in-docker). |
 | Subscriber repeatedly connects / disconnects | The subscriber and publisher share the same client ID (`-i`). Give each a unique ID. |

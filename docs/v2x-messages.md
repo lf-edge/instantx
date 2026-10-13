@@ -6,11 +6,9 @@
 
 **ETSI** ([European Telecommunications Standards Institute](https://www.etsi.org/)) **C-ITS** ([Cooperative Intelligent Transport Systems](https://portal.etsi.org/Services/Centre-for-Testing-Interoperability/Activities/Intelligent-Transport-System/C-ITS-Protocols)) play a pivotal role in revolutionizing transportation systems by enabling vehicles and infrastructure to communicate with each other. These systems enhance road safety, optimize traffic flow, and improve overall efficiency on the roads.
 
-This document delves into the specifics of two crucial message formats defined by ETSI for C-ITS: **DENM v2** ([Decentralized Environmental Notification Message](https://www.etsi.org/deliver/etsi_en/302600_302699/30263703/01.03.01_60/en_30263703v010301p.pdf)) and **IVIM** ([Infrastructure to Vehicle Information Message](https://www.etsi.org/deliver/etsi_ts/103300_103399/103301/02.01.01_60/ts_103301v020101p.pdf)). 
-
+This document delves into the specifics of two crucial message formats defined by ETSI for C-ITS: **DENM v2** ([Decentralized Environmental Notification Message](https://www.etsi.org/deliver/etsi_en/302600_302699/30263703/01.03.01_60/en_30263703v010301p.pdf)) and **IVIM** ([Infrastructure to Vehicle Information Message](https://www.etsi.org/deliver/etsi_ts/103300_103399/103301/02.01.01_60/ts_103301v020101p.pdf)).
 
 ## ETSI C-ITS Messages
-
 
 | C-ITS Message Type | ETSI Standard |
 | --------- | ---------- |
@@ -44,7 +42,6 @@ Each exchanged C-ITS message is expected to be included in a packet containing a
 | GN Header | BTP Header | C-ITS Message |
 | --------- | ---------- | -------------- |
 | ETSI EN 302 636-4-1 V1.4.1 (2020-01) | ETSI EN 302 636-5-1 V2.2.1 (2019-05) | *DENM,IVIM,... included in the packet shall be [ASN.1 UPER encoded.](./Encoding.md)* |
- 
 
 ### 1. GeoNetwork Header
 
@@ -54,18 +51,14 @@ The GeoNetwork Header contains metadata related to the geographic scope and rout
   
 - **Validity Period**: Defines the time window during which the message is considered valid and relevant.
   
-- **Security Information**: Includes cryptographic signatures or other security measures to ensure message authenticity and integrity. 
+- **Security Information**: Includes cryptographic signatures or other security measures to ensure message authenticity and integrity.
 
 > *The Security Header included in the GN Header is not required.*
- 
- 
+
 ### 2. BTP-B (Basic Transport Protocol Block) Header
 
 The BTPB Header provides basic transport-level information necessary for routing and handling the message within the communication network. It includes:
 
-- **Destination Port**: It identifies the protocol entity at the ITS facilities layer in the destination. For well-known ports it shall be set to a value corresponding to the identified facilities layer service as specified the values in [ETSI TS 103 248](https://www.etsi.org/deliver/etsi_ts/103200_103299/103248/02.01.01_60/ts_103248v020101p.pdf). 
+- **Destination Port**: It identifies the protocol entity at the ITS facilities layer in the destination. For well-known ports it shall be set to a value corresponding to the identified facilities layer service as specified the values in [ETSI TS 103 248](https://www.etsi.org/deliver/etsi_ts/103200_103299/103248/02.01.01_60/ts_103248v020101p.pdf).
 
 - **Destination Port Info**: It provides additional information. Default setting is 0.
-
-
-
