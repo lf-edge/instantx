@@ -1,2 +1,2 @@
-kafka-python==3.0.11
+kafka-python==3.0.12
 prometheus_client==0.26.0
